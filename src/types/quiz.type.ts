@@ -1,3 +1,5 @@
+import type { Question } from "./question.type";
+
 export interface GetCategoryResponse {
   categories: [string];
 }
@@ -16,4 +18,20 @@ export interface GetQuizResponse {
 
 export interface GetMyQuizResponse {
   quiz: Quiz[];
+}
+
+export interface CreateQuizDTO {
+  title: string;
+  description: string;
+  category: string;
+  questions: Question[];
+}
+
+export interface CreateQuizResponse {
+  message: string;
+  quiz: CreateQuizDTO;
+}
+
+export interface DeleteQuizResponse {
+  message: string;
 }

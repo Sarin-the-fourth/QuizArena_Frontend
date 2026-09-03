@@ -25,9 +25,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useDeleteQuiz } from "@/hooks/useQuiz";
+import { Spinner } from "./ui/spinner";
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -37,9 +38,13 @@ interface QuizCardProps {
 
 const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-
+  const { mutate: deleteQuiz, isPending } = useDeleteQuiz();
   const { data, isLoading } = useGetOneUser(quiz.createdBy);
   const user = data?.data?.user;
+
+  const handleDelete = (id: string) => {
+    deleteQuiz(id);
+  };
 
   return (
     <>
@@ -51,13 +56,13 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
             </CardTitle>
 
             <CardDescription>
-              <Skeleton className="h-6 w-[200px]" />
+              <Skeleton className="h-6 w-50" />
             </CardDescription>
           </CardHeader>
 
           <CardContent>
             <CardDescription className="flex flex-wrap!">
-              <Skeleton className="h-6 w-[500px]" />
+              <Skeleton className="h-6 w-125" />
             </CardDescription>
           </CardContent>
 
@@ -97,13 +102,15 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
 
                     <DropdownMenuItem
                       variant="destructive"
-                      onClick={() => {
-                        // Open delete confirmation
-                        console.log("Delete quiz:", quiz._id);
-                      }}
+                      onClick={() => handleDelete(quiz._id)}
+                      disabled={isPending}
                     >
-                      <Trash2 />
-                      Delete Quiz
+                      {isPending ? (
+                        <Spinner data-icon="inline-start" />
+                      ) : (
+                        <Trash2 />
+                      )}
+                      {isPending ? "Deleting..." : "Delete Quiz"}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

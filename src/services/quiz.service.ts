@@ -1,5 +1,8 @@
 import { axiosInstance } from "@/api/axios";
 import type {
+  CreateQuizDTO,
+  CreateQuizResponse,
+  DeleteQuizResponse,
   GetCategoryResponse,
   GetMyQuizResponse,
   GetQuizResponse,
@@ -18,4 +21,16 @@ export const getQuizCategory = (): Promise<
 
 export const getMyQuiz = (): Promise<AxiosResponse<GetMyQuizResponse>> => {
   return axiosInstance.get(`/quiz/my`);
+};
+
+export const createQuiz = (
+  data: CreateQuizDTO
+): Promise<AxiosResponse<CreateQuizResponse>> => {
+  return axiosInstance.post(`/quiz/create`, data);
+};
+
+export const deleteQuiz = (
+  id: string
+): Promise<AxiosResponse<DeleteQuizResponse>> => {
+  return axiosInstance.delete(`/quiz/${id}`);
 };

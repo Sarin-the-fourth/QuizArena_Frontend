@@ -2,21 +2,14 @@ import CategoryCarousel from "@/components/CategoryCarousel";
 import EmptyData from "@/components/EmptyData";
 import Heading from "@/components/Heading";
 import QuizCard from "@/components/QuizCard";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
+
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { useGetQuiz } from "@/hooks/useQuiz";
-import { CornerDownLeft, Search, SearchAlert } from "lucide-react";
+import { CornerDownLeft, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 

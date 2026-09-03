@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 const QuickPlayPage = () => {
   const [roomCode, setRoomCode] = useState<string>("");
-  const { data, isLoading } = useGetGame();
+  const { data } = useGetGame();
   const navigate = useNavigate();
 
   const games = data?.data?.games ?? [];

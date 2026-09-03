@@ -3,16 +3,20 @@ import EmptyData from "@/components/EmptyData";
 import Heading from "@/components/Heading";
 import QuizCard from "@/components/QuizCard";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useGetMyQuiz } from "@/hooks/useQuiz";
 import { LayersPlus } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const MyQuizzesPage = () => {
   const { data, isLoading } = useGetMyQuiz();
   const [open, setOpen] = useState<boolean>(false);
   const quizzes = data?.data?.quiz ?? [];
-  const navigate = useNavigate();
+
   return (
     <div
       data-aos="fade-up"
@@ -24,13 +28,26 @@ const MyQuizzesPage = () => {
           heading="Your Quizzes"
           description="Create, manage, and keep track of the quizzes you've built."
         />
-        <Button
-          onClick={() => setOpen(true)}
-          className="font-Outfit flex items-center gap-2"
-        >
-          <LayersPlus />
-          Create a Quiz!
-        </Button>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                onClick={() => setOpen(true)}
+                className="font-Outfit flex items-center gap-2"
+                disabled={!localStorage.getItem("accessToken")}
+              >
+                <LayersPlus />
+                Create a Quiz!
+              </Button>
+            }
+          />
+
+          {!localStorage.getItem("accessToken") && (
+            <TooltipContent className="font-Outfit">
+              Login/Signup to create a quiz
+            </TooltipContent>
+          )}
+        </Tooltip>
       </div>
 
       {quizzes.length <= 0 ? (
@@ -57,7 +74,7 @@ const MyQuizzesPage = () => {
         </div>
       )}
 
-      <CreateQuizDialog open={open} />
+      <CreateQuizDialog open={open} onOpenChange={setOpen} />
     </div>
   );
 };
