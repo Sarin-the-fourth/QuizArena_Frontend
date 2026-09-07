@@ -7,6 +7,10 @@ import {
   SignUpPage,
   QuickPlayPage,
   MyQuizzesPage,
+  NotFound,
+  GamePage,
+  WaitingPage,
+  InProgressPage,
 } from "./LazyImports";
 
 export const router = createBrowserRouter([
@@ -30,6 +34,20 @@ export const router = createBrowserRouter([
         path: "/my-quiz",
         element: <MyQuizzesPage />,
       },
+      {
+        path: "/game/:roomCode",
+        element: <GamePage />,
+        children: [
+          {
+            index: true,
+            element: <WaitingPage />,
+          },
+          {
+            path: "play",
+            element: <InProgressPage />,
+          },
+        ],
+      },
     ],
   },
   {
@@ -39,5 +57,9 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);

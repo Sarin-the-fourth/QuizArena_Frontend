@@ -67,7 +67,7 @@ const BasicInfo = ({ form }: BasicInfoProps) => {
           <InputGroup className="w-full min-w-0">
             <InputGroupTextarea
               placeholder="Describe what your quiz is about..."
-              className="min-h-[100px] min-w-0 w-full max-w-full resize-none wrap-anywhere"
+              className="min-h-25 min-w-0 w-full max-w-full resize-none wrap-anywhere"
               maxLength={150}
               {...register("description")}
               onChange={(e) => setCountWords(e.target.value)}

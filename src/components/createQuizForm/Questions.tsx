@@ -1,10 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import {
-  Controller,
-  useFieldArray,
-  useWatch,
-  type UseFormReturn,
-} from "react-hook-form";
+import { Controller, useFieldArray, type UseFormReturn } from "react-hook-form";
 
 import { Plus, X } from "lucide-react";
 
@@ -45,7 +40,6 @@ const Questions = ({ form }: QuestionsProps) => {
 
   const {
     control,
-    register,
     setValue,
     trigger,
     getValues,

@@ -35,3 +35,11 @@ export interface CreateQuizResponse {
 export interface DeleteQuizResponse {
   message: string;
 }
+
+export interface PopulateQuestions extends Quiz {
+  questions: Question[];
+}
+
+export interface GetOneQuizResponse {
+  quiz: PopulateQuestions;
+}

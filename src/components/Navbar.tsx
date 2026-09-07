@@ -16,6 +16,9 @@ import {
 import { Button } from "./ui/button";
 import { UserIcon } from "lucide-react";
 import { useGetMe } from "@/hooks/useUser";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "@/services/auth.service";
+import { showErrorToast, showSuccessToast } from "./toast";
 
 const menuItems = [
   {
@@ -50,6 +53,20 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: (res) => {
+      showSuccessToast(res?.data?.message);
+      localStorage.removeItem("accessToken");
+      navigate(0);
+    },
+    onError: (error) => showErrorToast(error),
+  });
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   return (
     <nav
@@ -104,14 +121,14 @@ const Navbar = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="rounded-full cursor-pointer flex flex-row items-center gap-4 font-ComicRelief"
+                        className="rounded-full cursor-pointer flex flex-row items-center gap-2 font-ComicRelief"
                       >
                         <Avatar size="default">
                           <AvatarFallback>
                             <UserIcon />
                           </AvatarFallback>
                         </Avatar>
-                        <span className="font-semibold uppercase text-base">
+                        <span className="font-semibold text-sm">
                           {user.name.split(" ").slice(0, 1)}
                         </span>
                       </Button>
@@ -125,10 +142,7 @@ const Navbar = () => {
 
                     <DropdownMenuGroup>
                       <DropdownMenuItem
-                        onClick={() => {
-                          localStorage.removeItem("accessToken");
-                          navigate(0);
-                        }}
+                        onClick={() => handleLogout()}
                         variant="destructive"
                       >
                         Log out

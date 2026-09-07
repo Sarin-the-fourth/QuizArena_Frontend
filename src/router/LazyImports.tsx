@@ -11,3 +11,11 @@ export const QuickPlayPage = React.lazy(
 export const MyQuizzesPage = React.lazy(
   () => import("./../pages/MyQuizzesPage")
 );
+export const NotFound = React.lazy(() => import("./../pages/NotFound"));
+export const GamePage = React.lazy(() => import("./../pages/GamePage"));
+export const WaitingPage = React.lazy(
+  () => import("./../components/gamePageComp/WaitingPage")
+);
+export const InProgressPage = React.lazy(
+  () => import("./../components/gamePageComp/InProgressPage")
+);

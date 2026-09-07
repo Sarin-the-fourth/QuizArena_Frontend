@@ -18,3 +18,7 @@ export const login = (
 ): Promise<AxiosResponse<loginResponse>> => {
   return axiosInstance.post("/auth/login", data);
 };
+
+export const logout = () => {
+  return axiosInstance.post("/auth/logout");
+};

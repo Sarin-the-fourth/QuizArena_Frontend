@@ -1,4 +1,4 @@
-import { toast } from "@/components/ui/toast";
+import { showErrorToast, showSuccessToast } from "@/components/toast";
 import {
   createQuiz,
   deleteQuiz,
@@ -7,7 +7,6 @@ import {
   getQuizCategory,
 } from "@/services/quiz.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 
 export const useGetCategory = () => {
   return useQuery({
@@ -37,24 +36,9 @@ export const useCreateQuiz = () => {
     mutationKey: ["create-quiz"],
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["my-quiz"] });
-      toast.add({
-        type: "success",
-        description: res.data.message,
-      });
+      showSuccessToast(res.data.message);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        toast.add({
-          type: "error",
-          description: error.response?.data?.message ?? "Something went wrong!",
-        });
-      } else {
-        toast.add({
-          type: "error",
-          description: "Something went wrong",
-        });
-      }
-    },
+    onError: (error) => showErrorToast(error),
   });
 };
 
@@ -62,26 +46,11 @@ export const useDeleteQuiz = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteQuiz(id),
-
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["my-quiz"] });
-      toast.add({
-        type: "success",
-        description: res.data.message,
-      });
+
+      showSuccessToast(res.data.message);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        toast.add({
-          type: "error",
-          description: error.response?.data?.message ?? "Something went wrong!",
-        });
-      } else {
-        toast.add({
-          type: "error",
-          description: "Something went wrong",
-        });
-      }
-    },
+    onError: (error) => showErrorToast(error),
   });
 };
