@@ -43,3 +43,32 @@ export interface PopulateQuestions extends Quiz {
 export interface GetOneQuizResponse {
   quiz: PopulateQuestions;
 }
+
+export interface SubmitQuizQuestion {
+  id: string;
+  answer: string;
+}
+
+export interface SubmitQuizResponse {
+  roomCode: string;
+  answers: SubmitQuizQuestion[];
+}
+
+export interface Answer {
+  questionId: string;
+  answer: string;
+}
+
+export interface SubmitQuizDTO {
+  answers: Answer[];
+}
+
+export interface SubmitQuizResponse {
+  message: string;
+  submit: {
+    correctAnswer: number;
+    totalAnswer: number;
+    scoreAdded: number;
+    roomCode: string;
+  };
+}

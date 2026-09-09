@@ -1,5 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { showSuccessToast } from "@/components/toast";
+import { useNavigate, type NavigateFunction } from "react-router-dom";
 
 export const handlePlayerJoined = (
   data: { userId: string },
@@ -15,10 +16,12 @@ export const handlePlayerJoined = (
 
 export const handleGameStarted = (
   queryClient: QueryClient,
-  roomCode: string
+  roomCode: string,
+  navigate: NavigateFunction
 ) => {
   console.log("🚀 gameStarted RECEIVED");
-
+  // make an error if someone else tries to enter the room which in on progress from the url
+  navigate(`/game/${roomCode}/play`);
   queryClient.invalidateQueries({
     queryKey: ["one-game", roomCode],
   });

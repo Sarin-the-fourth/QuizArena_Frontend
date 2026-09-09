@@ -11,6 +11,8 @@ import {
   GamePage,
   WaitingPage,
   InProgressPage,
+  ScoreBoard,
+  UnderConstruction,
 } from "./LazyImports";
 
 export const router = createBrowserRouter([
@@ -46,6 +48,10 @@ export const router = createBrowserRouter([
             path: "play",
             element: <InProgressPage />,
           },
+          {
+            path: "scoreboard",
+            element: <ScoreBoard />,
+          },
         ],
       },
     ],
@@ -57,6 +63,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/under-construction",
+    element: <UnderConstruction />,
   },
   {
     path: "*",

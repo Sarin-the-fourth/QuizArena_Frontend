@@ -4,8 +4,13 @@ export interface Game {
   hostId: string;
   roomCode: string;
   gameMode: string;
-  players: string[];
+  players: GamePlayer[];
   status: string;
+}
+
+export interface GamePlayer {
+  userId: string;
+  score: number;
 }
 
 export interface QuizSummary {
@@ -23,22 +28,20 @@ export interface PopulatedGame
   extends Omit<Game, "quizId" | "hostId" | "players"> {
   quizId: QuizSummary;
   hostId: Player;
-  players: Player[];
+  players: PopulatedGamePlayer[];
+}
+
+export interface PopulatedGamePlayer {
+  userId: Player;
+  score: number;
 }
 
 export interface GetGameResponse {
   games: PopulatedGame[];
 }
 
-export interface PopulatedOneGame
-  extends Omit<Game, "quizId" | "hostId" | "players"> {
-  quizId: QuizSummary;
-  hostId: Player;
-  players: Player[];
-}
-
 export interface GetOneGameResponse {
-  game: PopulatedOneGame;
+  game: PopulatedGame;
 }
 
 export interface CreateGameDTO {

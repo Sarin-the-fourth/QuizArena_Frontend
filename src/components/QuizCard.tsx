@@ -40,6 +40,7 @@ import { useForm } from "react-hook-form";
 import { modeSchema, type GameMode } from "@/schema/game.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateGame } from "@/hooks/useGame";
+import { useNavigate } from "react-router-dom";
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -53,6 +54,7 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
   const createGame = useCreateGame();
   const { data, isLoading } = useGetOneUser(quiz.createdBy);
   const user = data?.data?.user;
+  const navigate = useNavigate();
 
   const form = useForm<GameMode>({
     resolver: zodResolver(modeSchema),
@@ -122,6 +124,7 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
                     <DropdownMenuItem
                       onClick={() => {
                         console.log("Edit quiz:", quiz._id);
+                        navigate(`/under-construction`);
                       }}
                     >
                       <Pencil />

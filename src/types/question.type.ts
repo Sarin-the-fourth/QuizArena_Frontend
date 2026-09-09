@@ -4,6 +4,7 @@ type Option = {
 };
 
 export type Question = {
+  _id: string;
   question: string;
   options: Option[];
   correctAnswer: string;

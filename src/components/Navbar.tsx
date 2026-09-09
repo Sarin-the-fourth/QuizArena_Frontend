@@ -137,7 +137,11 @@ const Navbar = () => {
 
                   <DropdownMenuContent className="w-46">
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>Profile</DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => navigate(`/under-construction`)}
+                      >
+                        Profile
+                      </DropdownMenuItem>
                     </DropdownMenuGroup>
 
                     <DropdownMenuGroup>

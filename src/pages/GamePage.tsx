@@ -11,13 +11,16 @@ import {
 import { useGetOneGame, useLeaveGame, useStartGame } from "@/hooks/useGame";
 import { useGetMe } from "@/hooks/useUser";
 import { socket } from "@/lib/socket";
+import { useGameSessionStore } from "@/stores/useGameStore";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useEffect } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 
 const GamePage = () => {
   const { roomCode } = useParams();
+  const setRoomCode = useGameSessionStore((state) => state.setRoomCode);
+  setRoomCode(roomCode);
   const { data, isLoading } = useGetOneGame(roomCode);
   const { data: me } = useGetMe();
   const leaveGame = useLeaveGame();
@@ -30,6 +33,7 @@ const GamePage = () => {
   const isWaiting = game?.status === "WAITING";
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!roomCode) return;
@@ -43,7 +47,7 @@ const GamePage = () => {
     };
 
     const onGameStarted = () => {
-      handleGameStarted(queryClient, roomCode);
+      handleGameStarted(queryClient, roomCode, navigate);
     };
 
     const onPlayerLeave = () => {
@@ -108,7 +112,7 @@ const GamePage = () => {
       </div>
       {isLoading ? (
         <div className="flex flex-col gap-10 font-Outfit">
-          <div className="grid grid-cols-[30%_70%] space-x-6">
+          <div className="grid grid-cols-[30%_70%] gap-5">
             <div className="w-full rounded-xl shadow-lg p-5 flex flex-col gap-5">
               <Skeleton className="h-6 w-36" />
               <div className="flex flex-col gap-4">
@@ -139,16 +143,20 @@ const GamePage = () => {
               </div>
               <ul className="flex flex-col gap-2">
                 {game?.players?.map((player) => (
-                  <li key={player._id} className="flex items-center gap-2">
+                  <li
+                    key={player.userId?._id}
+                    className="flex items-center gap-2"
+                  >
                     <span className="size-2 rounded-full bg-green-500" />
                     <span
                       className={`${
-                        player._id === game.hostId._id && "font-semibold"
+                        player.userId?._id === game.hostId._id &&
+                        "font-semibold"
                       }`}
                     >
-                      {player.name}
+                      {player.userId?.name}
                     </span>
-                    {player._id === game.hostId._id && (
+                    {player.userId?._id === game.hostId._id && (
                       <span className="font-semibold">
                         {"("}Host{")"}
                       </span>
@@ -160,10 +168,11 @@ const GamePage = () => {
             <Button
               variant="destructive"
               onClick={() => {
-                if (roomCode) {
-                  socket.emit("leaveGame", roomCode);
-                }
-                leaveGame.mutate(roomCode);
+                if (!roomCode) return;
+                socket.emit("leaveGame", roomCode);
+                leaveGame.mutate(roomCode, {
+                  onSuccess: () => navigate(`/`),
+                });
               }}
             >
               Leave Game

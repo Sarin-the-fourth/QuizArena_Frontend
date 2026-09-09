@@ -1,12 +1,14 @@
 import { ArrowDown } from "lucide-react";
 import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <section
       data-aos="fade-up"
       data-aos-duration="750"
-      className="relative rounded-3xl h-130 bg-[#FFEBB8] flex flex-row px-10 py-10"
+      className="relative rounded-3xl h-130 bg-[#FFEBB8] flex flex-row px-10 pt-10 pb-5"
     >
       <img
         src="/src/assets/decoratives/Rope.svg"
@@ -22,16 +24,19 @@ const HeroSection = () => {
               champion.
             </p>
             <p className="text-black/70">
-              {" "}
               Challenge yourself or compete with others in real-time quizzes.
             </p>
           </div>
         </div>
         <div className="flex flex-row gap-5 items-center">
-          <Button variant="default">Play Now</Button>
-          <Button variant="default">Create Game</Button>
+          <Button variant="default" onClick={() => navigate(`/play`)}>
+            Play Now
+          </Button>
+          <Button variant="default" onClick={() => navigate(`/quiz`)}>
+            Create Game
+          </Button>
         </div>
-        <span className="flex items-center gap-2 text-sm text-black/70">
+        <span className="flex mt-5 items-center gap-2 text-sm text-black/70">
           Explore More <ArrowDown className="w-4 h-4" />
         </span>
       </div>

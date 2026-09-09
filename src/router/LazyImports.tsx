@@ -19,3 +19,9 @@ export const WaitingPage = React.lazy(
 export const InProgressPage = React.lazy(
   () => import("./../components/gamePageComp/InProgressPage")
 );
+export const ScoreBoard = React.lazy(
+  () => import("./../components/gamePageComp/ScoreBoard")
+);
+export const UnderConstruction = React.lazy(
+  () => import("./../pages/UnderConstruction")
+);

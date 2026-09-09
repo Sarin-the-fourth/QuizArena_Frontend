@@ -7,6 +7,7 @@ import {
   leaveGame,
   startGame,
 } from "@/services/game.service";
+import { useGameSessionStore } from "@/stores/useGameStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -59,12 +60,13 @@ export const useJoinGame = () => {
 };
 
 export const useLeaveGame = () => {
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: leaveGame,
     onSuccess: (res) => {
       showSuccessToast(res.data.message);
-      navigate(`/`);
+      useGameSessionStore.getState().clearRoomCode();
+      queryClient.invalidateQueries({ queryKey: ["game"] });
     },
     onError: (error) => {
       showErrorToast(error);
@@ -73,12 +75,8 @@ export const useLeaveGame = () => {
 };
 
 export const useStartGame = () => {
-  const navigate = useNavigate();
   return useMutation({
     mutationFn: startGame,
-    onSuccess: (res) => {
-      navigate(`/game/${res.data.game.roomCode}/play`);
-    },
     onError: (error) => showErrorToast(error),
   });
 };

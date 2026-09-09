@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetOneUser = (id: string) => {
   return useQuery({
-    queryKey: ["oneUser"],
+    queryKey: ["oneUser", id],
     queryFn: () => getOneUser(id),
     enabled: !!id,
   });
