@@ -11,7 +11,7 @@ type CategoryCarouselProps = {
 const CategoryCarousel = ({ onCategorySelect }: CategoryCarouselProps) => {
   const { data } = useGetCategory();
   const categories = data?.data?.categories ?? [];
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
 
   // Three identical sets.
