@@ -25,18 +25,19 @@ export const useGetQuiz = () => {
   });
 };
 
-export const useGetOneQuiz = (id: string) => {
+export const useGetOneQuiz = (id?: string) => {
   return useQuery({
     queryKey: ["one-quiz"],
-    queryFn: () => getOneQuiz(id),
+    queryFn: () => getOneQuiz(id!),
     enabled: !!id,
   });
 };
 
-export const useGetQuestionsAnswer = (id: string) => {
+export const useGetQuestionsAnswer = (id?: string) => {
   return useQuery({
     queryKey: ["quiz-answer", id],
-    queryFn: () => getQuestionsAnswer(id),
+    queryFn: () => getQuestionsAnswer(id!),
+    enabled: !!id,
   });
 };
 

@@ -21,7 +21,7 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 const GamePage = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const setRoomCode = useGameSessionStore((state) => state.setRoomCode);
-  setRoomCode(roomCode);
+  setRoomCode(roomCode!);
   const { data, isLoading } = useGetOneGame(roomCode);
   const { data: me } = useGetMe();
   const leaveGame = useLeaveGame();
@@ -109,7 +109,7 @@ const GamePage = () => {
           {isWaiting &&
             (isHost ? (
               <Button
-                onClick={() => startGame.mutate(roomCode)}
+                onClick={() => startGame.mutate(roomCode!)}
                 className="w-fit"
               >
                 Start Game

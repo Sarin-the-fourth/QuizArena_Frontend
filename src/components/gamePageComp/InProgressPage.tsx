@@ -80,7 +80,7 @@ const InProgressPage = () => {
     }
 
     return {
-      questionId: question._id,
+      questionId: question?._id!,
       answer: selectedItemRef.current,
     };
   };
