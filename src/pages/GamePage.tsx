@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 
 const GamePage = () => {
-  const { roomCode } = useParams();
+  const { roomCode } = useParams<{ roomCode: string }>();
   const setRoomCode = useGameSessionStore((state) => state.setRoomCode);
   setRoomCode(roomCode);
   const { data, isLoading } = useGetOneGame(roomCode);

@@ -21,7 +21,7 @@ import {
   Trophy,
   Zap,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -170,7 +170,7 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
     deleteQuiz(id);
   };
 
-  const handleSubmit = (id: string, gameMode: string) => {
+  const handleSubmit = (id: string, gameMode: GameMode["mode"]) => {
     createGame.mutate({
       quizId: id,
       gameMode: gameMode,

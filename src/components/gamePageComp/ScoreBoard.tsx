@@ -87,7 +87,7 @@ const ScoreBoard = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sortedPlayer.map((player, index) => (
+                {sortedPlayer?.map((player, index) => (
                   <TableRow
                     key={index}
                     className={`font-semibold text-base ${

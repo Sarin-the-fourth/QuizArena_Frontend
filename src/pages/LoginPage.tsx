@@ -46,7 +46,7 @@ const LoginPage = () => {
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        setError(error.response.data.message ?? "Something went wrong");
+        setError(error.response?.data?.message ?? "Something went wrong");
       }
     },
   });

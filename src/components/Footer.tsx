@@ -1,6 +1,3 @@
-import { Trophy } from "lucide-react";
-import { Button } from "./ui/button";
-
 const Footer = () => {
   return (
     <footer className="relative overflow-hidden border-t border-black/10 bg-white/40 backdrop-blur-xl">

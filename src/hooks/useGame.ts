@@ -18,10 +18,10 @@ export const useGetGame = () => {
   });
 };
 
-export const useGetOneGame = (roomCode: string) => {
+export const useGetOneGame = (roomCode?: string) => {
   return useQuery({
     queryKey: ["one-game", roomCode],
-    queryFn: () => getOneGame(roomCode),
+    queryFn: () => getOneGame(roomCode!),
     enabled: !!roomCode,
   });
 };

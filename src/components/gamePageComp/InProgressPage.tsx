@@ -14,10 +14,9 @@ const InProgressPage = () => {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [selectedItem, setSelectedItem] = useState<string>("");
   const [answers, setAnswers] = useState<Answer[]>([]);
-  const [disable, setDisable] = useState<boolean>(false);
   const navigate = useNavigate();
   const submitMutation = useSubmitQuiz();
-  const { roomCode } = useParams();
+  const { roomCode } = useParams<{ roomCode: string }>();
   const { data } = useGetOneGame(roomCode);
   const game = data?.data?.game;
   const { data: quiz, isLoading } = useGetOneQuiz(game?.quizId._id);
@@ -150,7 +149,6 @@ const InProgressPage = () => {
             </div>
             <FieldSet>
               <RadioGroup
-                disabled={disable}
                 value={selectedItem}
                 onValueChange={setSelectedItem}
                 className="flex! flex-col! gap-5"
