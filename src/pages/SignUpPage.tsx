@@ -192,7 +192,6 @@ const SignUpPage = () => {
                 <InputGroup>
                   <InputGroupInput
                     id="confrimPassword"
-                    name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password..."
                     {...form.register("confirmPassword")}
