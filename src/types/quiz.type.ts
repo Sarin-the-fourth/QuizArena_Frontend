@@ -72,3 +72,10 @@ export interface SubmitQuizResponse {
     roomCode: string;
   };
 }
+
+export interface GetQuestionsAnswerResponse {
+  quiz: {
+    _id: string;
+    questions: Question[];
+  };
+}

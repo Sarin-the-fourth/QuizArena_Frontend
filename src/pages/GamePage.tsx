@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+  handleAllPlayerFinished,
   handleGameStarted,
   handlePlayerJoined,
   handlePlayerLeave,
@@ -39,11 +40,20 @@ const GamePage = () => {
     if (!roomCode) return;
 
     const joinRoom = () => {
+      console.log("Joining room:", {
+        socketId: socket.id,
+        roomCode,
+        connected: socket.connected,
+      });
       socket.emit("joinGame", roomCode);
     };
 
-    const onPlayerJoined = (data: { userId: string }) => {
+    const onPlayerJoined = (data: { userId: string; name: string }) => {
       handlePlayerJoined(data, queryClient, roomCode);
+    };
+
+    const onAllPlayerFinished = () => {
+      handleAllPlayerFinished(queryClient, roomCode);
     };
 
     const onGameStarted = () => {
@@ -63,6 +73,7 @@ const GamePage = () => {
     socket.on("gameStarted", onGameStarted);
     socket.on("playerLeft", onPlayerLeave);
     socket.on("connect_error", onConnectError);
+    socket.on("allPlayersFinished", onAllPlayerFinished);
 
     if (socket.connected) {
       joinRoom();
@@ -74,6 +85,7 @@ const GamePage = () => {
       socket.off("gameStarted", onGameStarted);
       socket.off("playerLeft", onPlayerLeave);
       socket.off("connect_error", onConnectError);
+      socket.off("allPlayersFinished", onAllPlayerFinished);
     };
   }, [roomCode, queryClient]);
 

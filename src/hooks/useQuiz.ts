@@ -1,15 +1,15 @@
-import { showErrorToast, showSuccessToast } from "@/components/toast";
+import { showErrorToast, showSuccessToast } from "@/components/Toast";
 import {
   createQuiz,
   deleteQuiz,
   getMyQuiz,
   getOneQuiz,
+  getQuestionsAnswer,
   getQuiz,
   getQuizCategory,
   submitQuiz,
 } from "@/services/quiz.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 
 export const useGetCategory = () => {
   return useQuery({
@@ -33,10 +33,19 @@ export const useGetOneQuiz = (id: string) => {
   });
 };
 
+export const useGetQuestionsAnswer = (id: string) => {
+  return useQuery({
+    queryKey: ["quiz-answer", id],
+    queryFn: () => getQuestionsAnswer(id),
+  });
+};
+
 export const useGetMyQuiz = () => {
+  const token = localStorage.getItem("accessToken");
   return useQuery({
     queryKey: ["my-quiz"],
     queryFn: getMyQuiz,
+    enabled: !!token,
   });
 };
 

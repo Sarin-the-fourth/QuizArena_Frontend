@@ -1,14 +1,14 @@
-import type { QueryClient } from "@tanstack/react-query";
-import { showSuccessToast } from "@/components/toast";
-import { useNavigate, type NavigateFunction } from "react-router-dom";
+import { QueryClient } from "@tanstack/react-query";
+import { showSuccessToast } from "@/components/Toast";
+import { type NavigateFunction } from "react-router-dom";
 
 export const handlePlayerJoined = (
-  data: { userId: string },
+  data: { userId: string; name: string },
   queryClient: QueryClient,
   roomCode: string
 ) => {
   console.log("🔥 playerJoined RECEIVED");
-  showSuccessToast(`${data.userId} player has joined!`);
+  showSuccessToast(`${data.name} player has joined!`);
   queryClient.invalidateQueries({
     queryKey: ["one-game", roomCode],
   });
@@ -37,6 +37,15 @@ export const handlePlayerLeave = (
 
   showSuccessToast("A player has left the game");
 
+  queryClient.invalidateQueries({
+    queryKey: ["one-game", roomCode],
+  });
+};
+
+export const handleAllPlayerFinished = (
+  queryClient: QueryClient,
+  roomCode: string
+) => {
   queryClient.invalidateQueries({
     queryKey: ["one-game", roomCode],
   });

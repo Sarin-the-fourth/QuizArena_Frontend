@@ -9,13 +9,38 @@ import {
 } from "../ui/table";
 import { useParams } from "react-router-dom";
 import { useGetOneGame } from "@/hooks/useGame";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "../ui/empty";
+import { Spinner } from "../ui/spinner";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import ViewAnswer from "../ViewAnswer";
+import { useGetQuestionsAnswer } from "@/hooks/useQuiz";
 
 const ScoreBoard = () => {
   const { roomCode } = useParams();
   const { data } = useGetOneGame(roomCode);
+  const [open, setOpen] = useState<boolean>(false);
   const playersInfo = data?.data.game.players;
+  const quizId = data?.data.game.quizId._id;
+  const isFinished = data?.data.game.status === "FINISHED";
+  const { data: quiz } = useGetQuestionsAnswer(quizId);
 
-  const sortedPlayer = playersInfo.toSorted((a, b) => b.score - a.score);
+  const questions = quiz?.data.quiz.questions;
+  console.log(questions);
+
+  const sortedPlayer = playersInfo?.toSorted((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+
+    return a.timeTaken - b.timeTaken;
+  });
 
   return (
     <div data-aos="fade-up" data-aos-duration="750" className="p-5">
@@ -34,33 +59,69 @@ const ScoreBoard = () => {
           </div>
         </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-20">Rank</TableHead>
-              <TableHead className="w-80 truncate">Player</TableHead>
-              <TableHead className="w-20">Score</TableHead>
-              <TableHead className="w-20">Time Taken</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortedPlayer.map((player, index) => (
-              <TableRow
-                key={index}
-                className={`font-semibold text-base ${
-                  index === 0 && "bg-[#f7e7b6f2] hover:bg-[#f7e7b6f2]!"
-                }`}
-              >
-                <TableCell className="text-start">{index + 1}</TableCell>
-                <TableCell className="text-start">
-                  {player.userId.name}
-                </TableCell>
-                <TableCell>{player.score}</TableCell>
-                <TableCell>N/A</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        {!isFinished ? (
+          <div className="flex min-h-100 items-center justify-center">
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Spinner className="h-5 w-5" />
+                </EmptyMedia>
+
+                <EmptyTitle>Calculating Results...</EmptyTitle>
+
+                <EmptyDescription>
+                  Hang tight while the other players finish the quiz.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </div>
+        ) : (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-20 text-start">Rank</TableHead>
+                  <TableHead className="w-80 truncate">Player</TableHead>
+                  <TableHead className="w-20 text-center">Score</TableHead>
+                  <TableHead className="w-20 text-center">Time Taken</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedPlayer.map((player, index) => (
+                  <TableRow
+                    key={index}
+                    className={`font-semibold text-base ${
+                      index === 0 && "bg-[#f7e7b6f2] hover:bg-[#f7e7b6f2]!"
+                    }`}
+                  >
+                    <TableCell className="text-start">{index + 1}</TableCell>
+                    <TableCell className="text-start">
+                      {player.userId.name}
+                    </TableCell>
+                    <TableCell>
+                      {player.score}/{questions?.length ?? 0}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {player.timeTaken}s
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <Button
+              variant="ghost"
+              className="flex justify-end underline text-sm cursor-pointer"
+              onClick={() => setOpen(true)}
+            >
+              View Answers
+            </Button>
+            <ViewAnswer
+              open={open}
+              onOpenChange={setOpen}
+              questions={questions ?? []}
+            />
+          </>
+        )}
       </div>
     </div>
   );

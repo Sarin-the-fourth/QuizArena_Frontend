@@ -6,6 +6,7 @@ import type {
   GetCategoryResponse,
   GetMyQuizResponse,
   GetOneQuizResponse,
+  GetQuestionsAnswerResponse,
   GetQuizResponse,
   SubmitQuizDTO,
   SubmitQuizResponse,
@@ -20,6 +21,12 @@ export const getOneQuiz = (
   id: string
 ): Promise<AxiosResponse<GetOneQuizResponse>> => {
   return axiosInstance.get(`/quiz/${id}`);
+};
+
+export const getQuestionsAnswer = (
+  quizId: string
+): Promise<AxiosResponse<GetQuestionsAnswerResponse>> => {
+  return axiosInstance.get(`/quiz/answers/${quizId}`);
 };
 
 export const getQuizCategory = (): Promise<

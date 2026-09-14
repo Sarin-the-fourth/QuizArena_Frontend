@@ -34,6 +34,7 @@ export interface PopulatedGame
 export interface PopulatedGamePlayer {
   userId: Player;
   score: number;
+  timeTaken: number;
 }
 
 export interface GetGameResponse {

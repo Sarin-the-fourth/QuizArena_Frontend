@@ -46,7 +46,7 @@ const MainLayout = () => {
     <div className="w-full flex flex-col">
       <SmoothScroll />
       <Navbar />
-      <div className="mt-30 px-10">
+      <div className="mt-30 px-10 pb-10">
         <Outlet />
       </div>
       <Footer />

@@ -18,7 +18,7 @@ import { UserIcon } from "lucide-react";
 import { useGetMe } from "@/hooks/useUser";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "@/services/auth.service";
-import { showErrorToast, showSuccessToast } from "./toast";
+import { showErrorToast, showSuccessToast } from "./Toast";
 
 const menuItems = [
   {

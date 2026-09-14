@@ -1,4 +1,4 @@
-import { showErrorToast, showSuccessToast } from "@/components/toast";
+import { showErrorToast, showSuccessToast } from "@/components/Toast";
 import {
   createGame,
   getGame,

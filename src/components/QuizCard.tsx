@@ -11,8 +11,17 @@ import {
 } from "./ui/card";
 import { useGetOneUser } from "@/hooks/useUser";
 import { Skeleton } from "./ui/skeleton";
-import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import {
+  EllipsisVertical,
+  Pencil,
+  Sparkle,
+  Star,
+  Target,
+  Trash2,
+  Trophy,
+  Zap,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -41,6 +50,7 @@ import { modeSchema, type GameMode } from "@/schema/game.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateGame } from "@/hooks/useGame";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -55,6 +65,97 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
   const { data, isLoading } = useGetOneUser(quiz.createdBy);
   const user = data?.data?.user;
   const navigate = useNavigate();
+  const decorRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
+  const decorations = [
+    {
+      symbol: "?",
+      top: "15%",
+      right: "36%",
+      color: "#E0A83F",
+      rotate: "-8deg",
+      size: "text-xl",
+    },
+    {
+      symbol: "!",
+      top: "32%",
+      right: "52%",
+      color: "#C0392B",
+      rotate: "6deg",
+      size: "text-lg",
+    },
+    {
+      Icon: Sparkle,
+      top: "48%",
+      right: "28%",
+      color: "#3A6B4A",
+      rotate: "0deg",
+      size: 16,
+    },
+    {
+      symbol: "x",
+      top: "62%",
+      right: "44%",
+      color: "#1B1F3B",
+      rotate: "-4deg",
+      size: "text-base",
+    },
+    {
+      Icon: Star,
+      top: "20%",
+      right: "16%",
+      color: "#E0A83F",
+      rotate: "10deg",
+      size: 14,
+    },
+    {
+      Icon: Zap,
+      top: "58%",
+      right: "12%",
+      color: "#C0392B",
+      rotate: "-10deg",
+      size: 16,
+    },
+    {
+      Icon: Target,
+      top: "40%",
+      right: "60%",
+      color: "#3A6B4A",
+      rotate: "5deg",
+      size: 14,
+    },
+    {
+      Icon: Trophy,
+      top: "10%",
+      right: "58%",
+      color: "#1B1F3B",
+      rotate: "-6deg",
+      size: 16,
+    },
+  ];
+
+  const handleCardEnter = () => {
+    gsap.to(decorRefs.current, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      ease: "bounce.out",
+      stagger: 0.05,
+      overwrite: true,
+    });
+  };
+
+  const handleCardLeave = () => {
+    gsap.to(decorRefs.current, {
+      opacity: 0,
+      y: 8,
+      scale: 0.8,
+      duration: 0.2,
+      ease: "power1.in",
+      overwrite: true,
+    });
+  };
 
   const form = useForm<GameMode>({
     resolver: zodResolver(modeSchema),
@@ -79,7 +180,7 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
   return (
     <>
       {isLoading || loading ? (
-        <Card className="flex text-start w-full max-w-sm hover:shadow-lg duration-300 transition-shadow font-Outfit">
+        <Card className=" flex text-start w-full max-w-sm hover:shadow-lg duration-300 transition-shadow font-Outfit">
           <CardHeader>
             <CardTitle>
               <Skeleton className="h-6 w-63" />
@@ -103,7 +204,35 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
           </CardFooter>
         </Card>
       ) : (
-        <Card className="flex text-start w-full max-w-sm hover:shadow-lg duration-300 transition-shadow font-Outfit">
+        <Card
+          onMouseEnter={handleCardEnter}
+          onMouseLeave={handleCardLeave}
+          className="relative group flex text-start w-full max-w-sm hover:shadow-lg hover:-translate-y-1 duration-300 transition-all font-Outfit"
+        >
+          {/* accent bar */}
+          <div className="absolute left-0 top-0 h-0 w-1.5 bg-primary rounded-r-full transition-all duration-300 group-hover:h-full" />
+
+          {decorations.map((d, i) => (
+            <span
+              ref={(el) => {
+                decorRefs.current[i] = el;
+              }}
+              key={i}
+              className={`font-ComicRelief absolute font-bold pointer-events-none ${
+                d.size ?? ""
+              }`}
+              style={{
+                top: d.top,
+                right: d.right,
+                color: `${d.color}50`,
+                transform: `rotate(${d.rotate})`,
+                opacity: 0,
+              }}
+            >
+              {d.Icon ? <d.Icon size={d.size} /> : d.symbol}
+            </span>
+          ))}
+
           <CardHeader>
             <CardTitle className="font-Outfit text-lg">{quiz.title}</CardTitle>
 
@@ -164,6 +293,7 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
                 onClick={() => {
                   setOpenDialog(true);
                 }}
+                disabled={!localStorage.getItem("accessToken")}
               >
                 Play Now
               </Button>

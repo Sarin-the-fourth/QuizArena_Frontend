@@ -6,8 +6,9 @@ import { FieldDescription, FieldSet } from "../ui/field";
 import { useGetOneQuiz, useSubmitQuiz } from "@/hooks/useQuiz";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Answer } from "@/types/quiz.type";
+import gsap from "gsap";
 
 const InProgressPage = () => {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
@@ -24,6 +25,12 @@ const InProgressPage = () => {
   const question = questions?.[currentQuestion];
   const [timeLeft, setTimeLeft] = useState<number>(question?.timeLimit ?? 0);
   const isLastQuestion = currentQuestion === (questions?.length ?? 0) - 1;
+  const timerRef = useRef<HTMLSpanElement | null>(null);
+  const selectedItemRef = useRef("");
+
+  useEffect(() => {
+    selectedItemRef.current = selectedItem;
+  }, [selectedItem]);
 
   useEffect(() => {
     if (!question) return;
@@ -35,11 +42,7 @@ const InProgressPage = () => {
         remaining = 0;
         setTimeLeft(0);
         clearInterval(timer);
-        if (!isLastQuestion) {
-          setCurrentQuestion((current) => current + 1);
-        } else {
-          setDisable(true);
-        }
+        moveToNextQuestion();
         return;
       }
       setTimeLeft(remaining);
@@ -49,14 +52,69 @@ const InProgressPage = () => {
     };
   }, [currentQuestion, question?.timeLimit, isLastQuestion]);
 
+  useEffect(() => {
+    if (!timerRef.current) return;
+    if (timeLeft <= 5) {
+      gsap.fromTo(
+        timerRef.current,
+        {
+          scale: 1,
+          y: 0,
+        },
+        {
+          scale: 1.1,
+          y: -5,
+          duration: 0.2,
+          ease: "bounce.out",
+          yoyo: true,
+          repeat: 1,
+        }
+      );
+    } else {
+      return;
+    }
+  }, [timeLeft]);
+
   const getCurrentAnswer = (): Answer | null => {
-    if (!selectedItem || !question) {
+    if (!selectedItemRef.current || !question) {
       return null;
     }
+
     return {
       questionId: question._id,
-      answer: selectedItem,
+      answer: selectedItemRef.current,
     };
+  };
+
+  const moveToNextQuestion = () => {
+    const currentAnswer = getCurrentAnswer();
+
+    if (currentAnswer) {
+      setAnswers((prev) => [...prev, currentAnswer]);
+    }
+
+    if (isLastQuestion) {
+      const finalAnswers = currentAnswer
+        ? [...answers, currentAnswer]
+        : answers;
+
+      submitMutation.mutate(
+        {
+          roomCode: roomCode!,
+          data: {
+            answers: finalAnswers,
+          },
+        },
+        {
+          onSuccess: () => navigate(`/game/${roomCode}/scoreboard`),
+        }
+      );
+
+      return;
+    }
+
+    setSelectedItem("");
+    setCurrentQuestion((prev) => prev + 1);
   };
 
   return (
@@ -66,11 +124,11 @@ const InProgressPage = () => {
           <Skeleton className="h-64 w-full rounded-xl" />
         </div>
       ) : (
-        <div className="flex flex-col gap-10 overflow-y-auto">
+        <div className="flex flex-col gap-10 overflow-y-hidden overflow-x-hidden">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-col text-start">
               <h2 className="text-black!">{game?.quizId.title}</h2>
-              <span className="text-muted-foreground text-sm!">
+              <span className="text-muted-foreground text-sm! ">
                 Category: {game?.quizId.category}
               </span>
             </div>
@@ -78,12 +136,13 @@ const InProgressPage = () => {
 
           <div className="flex flex-col gap-3 text-start">
             <div className="flex justify-between items-center">
-              <span className="text-lg font-semibold w-[80%]">
+              <div className="text-lg font-semibold w-[80%] whitespace-pre-line">
                 Question {currentQuestion + 1}: {question?.question}?
-              </span>
+              </div>
               <span
-                className={`text-muted-foreground text-sm ${
-                  timeLeft <= 5 && `text-red-500! font-semibold!`
+                ref={timerRef}
+                className={`text-muted-foreground text-sm mr-5 ${
+                  timeLeft <= 5 && `text-red-500! font-semibold! overflow-none`
                 }`}
               >
                 Time: {timeLeft} sec
@@ -111,34 +170,7 @@ const InProgressPage = () => {
             </FieldSet>
 
             <div className="flex justify-end">
-              <Button
-                onClick={() => {
-                  const currentAnswer = getCurrentAnswer();
-                  if (currentAnswer) {
-                    setAnswers((prev) => [...prev, currentAnswer]);
-                  }
-                  if (isLastQuestion) {
-                    const finalAnswers = currentAnswer
-                      ? [...answers, currentAnswer]
-                      : answers;
-                    submitMutation.mutate(
-                      {
-                        roomCode: roomCode!,
-                        data: {
-                          answers: finalAnswers,
-                        },
-                      },
-                      {
-                        onSuccess: () =>
-                          navigate(`/game/${roomCode}/scoreboard`),
-                      }
-                    );
-                    return;
-                  }
-                  setSelectedItem("");
-                  setCurrentQuestion((prev) => prev + 1);
-                }}
-              >
+              <Button onClick={moveToNextQuestion}>
                 {isLastQuestion ? "Submit" : "Next"}
               </Button>
             </div>
