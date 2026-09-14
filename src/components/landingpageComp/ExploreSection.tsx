@@ -1,5 +1,5 @@
 const ExploreSection = () => {
-  return <div>ExploreSection</div>;
+  return <div></div>;
 };
 
 export default ExploreSection;
