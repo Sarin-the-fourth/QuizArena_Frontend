@@ -43,8 +43,21 @@ const Navbar = () => {
   const user = data?.data?.user;
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      const scrolledUp = currentScrollY < lastScrollY;
+
+      if (currentScrollY <= 20 || scrolledUp) {
+        // Near the top, or scrolling up even slightly (anywhere on the page): show
+        setScrolled(false);
+      } else {
+        // Scrolling down past the threshold: hide
+        setScrolled(true);
+      }
+
+      lastScrollY = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll);

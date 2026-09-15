@@ -146,7 +146,7 @@ const QuizPage = () => {
           <div
             data-aos="fade-up"
             data-aos-duration="750"
-            className="flex flex-wrap gap-5"
+            className="grid grid-cols-3 gap-5 2xl:gap-10 mx-auto justify-items-center"
           >
             {paginatedList.map((quiz) => (
               <QuizCard

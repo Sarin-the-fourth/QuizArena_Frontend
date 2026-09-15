@@ -168,7 +168,10 @@ const InProgressPage = () => {
             </FieldSet>
 
             <div className="flex justify-end">
-              <Button onClick={moveToNextQuestion}>
+              <Button
+                onClick={moveToNextQuestion}
+                disabled={submitMutation.isPending}
+              >
                 {isLastQuestion ? "Submit" : "Next"}
               </Button>
             </div>
