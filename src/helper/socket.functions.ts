@@ -7,7 +7,6 @@ export const handlePlayerJoined = (
   queryClient: QueryClient,
   roomCode: string
 ) => {
-  console.log("🔥 playerJoined RECEIVED");
   showSuccessToast(`${data.name} player has joined!`);
   queryClient.invalidateQueries({
     queryKey: ["one-game", roomCode],
@@ -19,7 +18,6 @@ export const handleGameStarted = (
   roomCode: string,
   navigate: NavigateFunction
 ) => {
-  console.log("🚀 gameStarted RECEIVED");
   // make an error if someone else tries to enter the room which in on progress from the url
   navigate(`/game/${roomCode}/play`);
   queryClient.invalidateQueries({
@@ -33,8 +31,6 @@ export const handlePlayerLeave = (
   queryClient: QueryClient,
   roomCode: string
 ) => {
-  console.log("👋 playerLeft RECEIVED");
-
   showSuccessToast("A player has left the game");
 
   queryClient.invalidateQueries({
