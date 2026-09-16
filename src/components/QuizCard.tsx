@@ -51,6 +51,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateGame } from "@/hooks/useGame";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
+// import UpdateQuizDialog from "./UpdateQuizDialog";
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -58,81 +59,82 @@ interface QuizCardProps {
   isMyQuiz?: boolean;
 }
 
+const decorations = [
+  {
+    symbol: "?",
+    top: "15%",
+    right: "36%",
+    color: "#E0A83F",
+    rotate: "-8deg",
+    size: "text-xl",
+  },
+  {
+    symbol: "!",
+    top: "32%",
+    right: "52%",
+    color: "#C0392B",
+    rotate: "6deg",
+    size: "text-lg",
+  },
+  {
+    Icon: Sparkle,
+    top: "48%",
+    right: "28%",
+    color: "#3A6B4A",
+    rotate: "0deg",
+    size: 16,
+  },
+  {
+    symbol: "x",
+    top: "62%",
+    right: "44%",
+    color: "#1B1F3B",
+    rotate: "-4deg",
+    size: "text-base",
+  },
+  {
+    Icon: Star,
+    top: "20%",
+    right: "16%",
+    color: "#E0A83F",
+    rotate: "10deg",
+    size: 14,
+  },
+  {
+    Icon: Zap,
+    top: "58%",
+    right: "12%",
+    color: "#C0392B",
+    rotate: "-10deg",
+    size: 16,
+  },
+  {
+    Icon: Target,
+    top: "40%",
+    right: "60%",
+    color: "#3A6B4A",
+    rotate: "5deg",
+    size: 14,
+  },
+  {
+    Icon: Trophy,
+    top: "10%",
+    right: "58%",
+    color: "#1B1F3B",
+    rotate: "-6deg",
+    size: 16,
+  },
+];
+
 const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  // const [openUpdateDialog, setOpenUpdateDialog] = useState<boolean>(false);
   const { mutate: deleteQuiz, isPending } = useDeleteQuiz();
   const createGame = useCreateGame();
   const { data, isLoading } = useGetOneUser(quiz.createdBy);
   const user = data?.data?.user;
   const navigate = useNavigate();
   const decorRefs = useRef<(HTMLSpanElement | null)[]>([]);
-
-  const decorations = [
-    {
-      symbol: "?",
-      top: "15%",
-      right: "36%",
-      color: "#E0A83F",
-      rotate: "-8deg",
-      size: "text-xl",
-    },
-    {
-      symbol: "!",
-      top: "32%",
-      right: "52%",
-      color: "#C0392B",
-      rotate: "6deg",
-      size: "text-lg",
-    },
-    {
-      Icon: Sparkle,
-      top: "48%",
-      right: "28%",
-      color: "#3A6B4A",
-      rotate: "0deg",
-      size: 16,
-    },
-    {
-      symbol: "x",
-      top: "62%",
-      right: "44%",
-      color: "#1B1F3B",
-      rotate: "-4deg",
-      size: "text-base",
-    },
-    {
-      Icon: Star,
-      top: "20%",
-      right: "16%",
-      color: "#E0A83F",
-      rotate: "10deg",
-      size: 14,
-    },
-    {
-      Icon: Zap,
-      top: "58%",
-      right: "12%",
-      color: "#C0392B",
-      rotate: "-10deg",
-      size: 16,
-    },
-    {
-      Icon: Target,
-      top: "40%",
-      right: "60%",
-      color: "#3A6B4A",
-      rotate: "5deg",
-      size: 14,
-    },
-    {
-      Icon: Trophy,
-      top: "10%",
-      right: "58%",
-      color: "#1B1F3B",
-      rotate: "-6deg",
-      size: 16,
-    },
-  ];
 
   const handleCardEnter = () => {
     gsap.to(decorRefs.current, {
@@ -252,8 +254,7 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onClick={() => {
-                        console.log("Edit quiz:", quiz._id);
-                        navigate(`/under-construction`);
+                        navigate("/under-construction");
                       }}
                     >
                       <Pencil />
@@ -367,6 +368,12 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* <UpdateQuizDialog
+        quizId={quiz?._id}
+        open={openUpdateDialog}
+        onOpenChange={setOpenUpdateDialog}
+      /> */}
     </>
   );
 };

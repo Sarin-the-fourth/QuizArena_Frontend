@@ -1,3 +1,4 @@
+import type { QuizCategory } from "@/schema/quiz.schema";
 import type { Question } from "./question.type";
 
 export interface GetCategoryResponse {
@@ -8,7 +9,7 @@ export interface Quiz {
   _id: string;
   title: string;
   description: string;
-  category: string;
+  category: QuizCategory;
   createdBy?: string;
 }
 
@@ -78,4 +79,16 @@ export interface GetQuestionsAnswerResponse {
     _id: string;
     questions: Question[];
   };
+}
+
+export interface UpdateQuizDTO {
+  title?: string;
+  description?: string;
+  category?: string;
+  questions?: Question[];
+}
+
+export interface UpdateQuizResponse {
+  message: string;
+  quiz: PopulateQuestions;
 }

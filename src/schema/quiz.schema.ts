@@ -35,6 +35,20 @@ const questionSchema = z
     }
   });
 
+export const categorySchema = z.enum(
+  [
+    "IT",
+    "Automobiles",
+    "Science",
+    "History",
+    "Geography",
+    "Sports",
+    "Entertainment",
+    "General Knowledge",
+  ],
+  "Please select a category"
+);
+
 export const quizSchema = z.object({
   title: z
     .string()
@@ -48,21 +62,11 @@ export const quizSchema = z.object({
     .min(1, "Quiz description is required")
     .max(500, "Quiz description cannot exceed 500 characters"),
 
-  category: z.enum(
-    [
-      "IT",
-      "Automobiles",
-      "Science",
-      "History",
-      "Geography",
-      "Sports",
-      "Entertainment",
-      "General Knowledge",
-    ],
-    "Please select a category"
-  ),
+  category: categorySchema,
 
   questions: z.array(questionSchema).min(1, "Add at least one question"),
 });
 
 export type QuizFormData = z.infer<typeof quizSchema>;
+
+export type QuizCategory = z.infer<typeof categorySchema>;

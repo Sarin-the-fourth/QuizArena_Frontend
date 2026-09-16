@@ -8,6 +8,7 @@ import {
   getQuiz,
   getQuizCategory,
   submitQuiz,
+  updateQuiz,
 } from "@/services/quiz.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -27,7 +28,7 @@ export const useGetQuiz = () => {
 
 export const useGetOneQuiz = (id?: string) => {
   return useQuery({
-    queryKey: ["one-quiz"],
+    queryKey: ["one-quiz", id],
     queryFn: () => getOneQuiz(id!),
     enabled: !!id,
   });
@@ -80,6 +81,20 @@ export const useSubmitQuiz = () => {
   return useMutation({
     mutationFn: submitQuiz,
     onSuccess: (res) => {
+      showSuccessToast(res.data.message);
+    },
+    onError: (error) => showErrorToast(error),
+  });
+};
+
+export const useUpdateQuiz = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateQuiz,
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({
+        queryKey: ["one-quiz", res.data.quiz._id],
+      });
       showSuccessToast(res.data.message);
     },
     onError: (error) => showErrorToast(error),

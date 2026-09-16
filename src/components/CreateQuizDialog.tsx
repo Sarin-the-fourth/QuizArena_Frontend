@@ -27,7 +27,7 @@ type CreateQuizDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-const createEmptyQuestion = () => ({
+export const createEmptyQuestion = () => ({
   question: "",
   options: [
     { id: "a", option: "" },

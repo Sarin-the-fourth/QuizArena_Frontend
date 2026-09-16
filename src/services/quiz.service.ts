@@ -10,6 +10,8 @@ import type {
   GetQuizResponse,
   SubmitQuizDTO,
   SubmitQuizResponse,
+  UpdateQuizDTO,
+  UpdateQuizResponse,
 } from "@/types/quiz.type";
 import type { AxiosResponse } from "axios";
 
@@ -62,4 +64,14 @@ export const submitQuiz = ({
     `/quiz/${roomCode}/submit`,
     data
   );
+};
+
+export const updateQuiz = ({
+  quizId,
+  data,
+}: {
+  quizId: string;
+  data: UpdateQuizDTO;
+}): Promise<AxiosResponse<UpdateQuizResponse>> => {
+  return axiosInstance.put(`/quiz/update/${quizId}`, data);
 };

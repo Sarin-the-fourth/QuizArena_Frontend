@@ -77,6 +77,8 @@ const ExploreSection = () => {
           const position = (card.id - activeCard + cards.length) % cards.length;
           return (
             <div
+              data-aos="fade-up"
+              data-aos-duration="750"
               onMouseEnter={() => handleMouseEnter(card.id)}
               onMouseLeave={() => handleMouseLeave(card.id)}
               key={card.id}
