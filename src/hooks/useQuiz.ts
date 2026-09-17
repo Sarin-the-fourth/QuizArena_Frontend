@@ -95,6 +95,9 @@ export const useUpdateQuiz = () => {
       queryClient.invalidateQueries({
         queryKey: ["one-quiz", res.data.quiz._id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["my-quiz"],
+      });
       showSuccessToast(res.data.message);
     },
     onError: (error) => showErrorToast(error),

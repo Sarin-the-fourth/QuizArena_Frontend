@@ -37,7 +37,6 @@ const createEmptyQuestion = () => ({
 
 const Questions = ({ form }: QuestionsProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const {
     control,
     setValue,
@@ -45,8 +44,6 @@ const Questions = ({ form }: QuestionsProps) => {
     getValues,
     formState: { errors },
   } = form;
-
-  console.log("RHF questions:", form.getValues("questions"));
 
   const { fields, append } = useFieldArray({
     control,
@@ -78,13 +75,6 @@ const Questions = ({ form }: QuestionsProps) => {
    * This makes the UI update whenever a question
    * is edited.
    */
-
-  //   const questions = useWatch({
-  //     control,
-  //     name: "questions",
-  //   });
-
-  //   const question = questions?.[currentQuestion];
   const question = getValues(`questions.${currentQuestion}`);
 
   /*

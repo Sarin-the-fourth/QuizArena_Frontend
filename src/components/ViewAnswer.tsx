@@ -102,7 +102,7 @@ const ViewAnswer = ({ open, onOpenChange, questions }: ViewAnswerProp) => {
                   {isCorrect && (
                     <div className="flex items-center gap-1 text-sm font-semibold text-green-600">
                       <Check className="size-4" />
-                      Correct
+                      Correct Answer
                     </div>
                   )}
                 </div>

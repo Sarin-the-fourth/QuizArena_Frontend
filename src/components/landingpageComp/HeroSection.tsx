@@ -24,7 +24,7 @@ const HeroSection = () => {
       y: -500,
       duration: 0.1,
       opacity: 0,
-      ease: "power3.inOut",
+      ease: "power3.out",
       stagger: { each: 0.5 },
     })
       .from(splitTextArena.words, {

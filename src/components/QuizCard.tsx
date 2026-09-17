@@ -51,7 +51,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateGame } from "@/hooks/useGame";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
-// import UpdateQuizDialog from "./UpdateQuizDialog";
+import UpdateQuizDialog from "./UpdateQuizDialog";
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -128,7 +128,7 @@ const decorations = [
 
 const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  // const [openUpdateDialog, setOpenUpdateDialog] = useState<boolean>(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = useState<boolean>(false);
   const { mutate: deleteQuiz, isPending } = useDeleteQuiz();
   const createGame = useCreateGame();
   const { data, isLoading } = useGetOneUser(quiz.createdBy);
@@ -245,16 +245,23 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
             {isMyQuiz && (
               <CardAction>
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <Button variant="ghost" className="rounded-full!" size="xs">
-                      <EllipsisVertical />
-                    </Button>
-                  </DropdownMenuTrigger>
+                  <DropdownMenuTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        className="rounded-full!"
+                        size="xs"
+                      >
+                        <EllipsisVertical />
+                      </Button>
+                    }
+                  />
 
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onClick={() => {
-                        navigate("/under-construction");
+                        // navigate("/under-construction");
+                        setOpenUpdateDialog(true);
                       }}
                     >
                       <Pencil />
@@ -369,11 +376,11 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* <UpdateQuizDialog
+      <UpdateQuizDialog
         quizId={quiz?._id}
         open={openUpdateDialog}
         onOpenChange={setOpenUpdateDialog}
-      /> */}
+      />
     </>
   );
 };

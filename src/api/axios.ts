@@ -36,11 +36,7 @@ axiosInstance.interceptors.response.use(
     originalRequest._retry = true;
 
     try {
-      console.log("🔄 Trying to refresh access token...");
-
       const response = await refreshInstance.post("/auth/refresh");
-
-      console.log("✅ Refresh successful:", response.data);
 
       const newAccessToken = response.data.accessToken;
 
@@ -50,8 +46,6 @@ axiosInstance.interceptors.response.use(
 
       return axiosInstance(originalRequest);
     } catch (error) {
-      console.log("❌ Refresh failed:", error);
-
       localStorage.removeItem("accessToken");
       window.location.href = "/";
 

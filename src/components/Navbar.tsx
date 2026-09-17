@@ -49,7 +49,7 @@ const Navbar = () => {
       const currentScrollY = window.scrollY;
       const scrolledUp = currentScrollY < lastScrollY;
 
-      if (currentScrollY <= 20 || scrolledUp) {
+      if (currentScrollY <= 100 || scrolledUp) {
         // Near the top, or scrolling up even slightly (anywhere on the page): show
         setScrolled(false);
       } else {

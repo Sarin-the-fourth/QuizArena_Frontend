@@ -1,17 +1,24 @@
 import type { UseFormReturn } from "react-hook-form";
 
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
 
 import type { QuizFormData } from "@/schema/quiz.schema";
+import { ScrollArea } from "../ui/scroll-area";
+import { Field, FieldDescription, FieldLabel } from "../ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupTextarea,
+} from "../ui/input-group";
 
 interface UpdateBasicInfoProps {
   form: UseFormReturn<QuizFormData>;
@@ -29,84 +36,108 @@ const categories = [
 ] as const;
 
 const UpdateBasicInfo = ({ form }: UpdateBasicInfoProps) => {
-  const title = form.watch("title");
-  const description = form.watch("description");
-  const category = form.watch("category");
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = form;
 
-  const errors = form.formState.errors;
+  const description = watch("description") ?? "";
 
   return (
-    <div className="space-y-6">
-      {/* TITLE */}
-      <div className="space-y-2">
-        <label htmlFor="update-title" className="text-sm font-medium">
-          Quiz Title
-        </label>
+    <ScrollArea
+      data-aos="fade-up"
+      data-aos-duration="750"
+      className="2xl:h-full border border-gray-300 rounded-xl"
+    >
+      <div className="flex flex-col gap-5 p-5 font-Outfit">
+        <Field>
+          <FieldLabel className="text-base">Quiz Title</FieldLabel>
 
-        <Input
-          id="update-title"
-          value={title}
-          placeholder="Enter quiz title"
-          {...form.register("title")}
-        />
+          <InputGroup>
+            <InputGroupInput placeholder="Title..." {...register("title")} />
+          </InputGroup>
 
-        {errors.title && (
-          <p className="text-sm text-destructive">{errors.title.message}</p>
-        )}
+          <FieldDescription>Give your quiz a catchy name</FieldDescription>
+
+          {errors.title && (
+            <p className="text-sm text-destructive">{errors.title.message}</p>
+          )}
+        </Field>
+
+        {/* DESCRIPTION */}
+
+        <Field className="min-w-0 w-full">
+          <FieldLabel className="text-base">Description</FieldLabel>
+
+          <InputGroup className="w-full min-w-0">
+            <InputGroupTextarea
+              placeholder="Describe what your quiz is about..."
+              className="min-h-25 min-w-0 w-full max-w-full resize-none wrap-anywhere"
+              maxLength={150}
+              {...register("description")}
+            />
+
+            <InputGroupAddon align="block-end">
+              {description.length}/150
+            </InputGroupAddon>
+          </InputGroup>
+
+          <FieldDescription>
+            Briefly describe what this quiz is about
+          </FieldDescription>
+
+          {errors.description && (
+            <p className="text-sm text-destructive">
+              {errors.description.message}
+            </p>
+          )}
+        </Field>
+
+        {/* CATEGORY */}
+
+        <Field>
+          <FieldLabel className="text-base">Category</FieldLabel>
+
+          <Select
+            value={watch("category") ?? ""}
+            onValueChange={(value) =>
+              setValue("category", value as QuizFormData["category"], {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Categories</SelectLabel>
+
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <FieldDescription>
+            Choose a category that best fits your quiz
+          </FieldDescription>
+
+          {errors.category && (
+            <p className="text-sm text-destructive">
+              {errors.category.message}
+            </p>
+          )}
+        </Field>
       </div>
-
-      {/* DESCRIPTION */}
-      <div className="space-y-2">
-        <label htmlFor="update-description" className="text-sm font-medium">
-          Description
-        </label>
-
-        <Textarea
-          id="update-description"
-          value={description}
-          placeholder="Describe your quiz"
-          className="min-h-30 resize-none"
-          {...form.register("description")}
-        />
-
-        {errors.description && (
-          <p className="text-sm text-destructive">
-            {errors.description.message}
-          </p>
-        )}
-      </div>
-
-      {/* CATEGORY */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Category</label>
-
-        <Select
-          value={category}
-          onValueChange={(value) => {
-            form.setValue("category", value as QuizFormData["category"], {
-              shouldDirty: true,
-              shouldValidate: true,
-            });
-          }}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-
-          <SelectContent>
-            {categories.map((item) => (
-              <SelectItem key={item} value={item}>
-                {item}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {errors.category && (
-          <p className="text-sm text-destructive">{errors.category.message}</p>
-        )}
-      </div>
-    </div>
+    </ScrollArea>
   );
 };
 

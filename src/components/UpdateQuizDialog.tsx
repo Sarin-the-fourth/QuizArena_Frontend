@@ -20,7 +20,11 @@ import UpdateQuestions from "./updateQuizForm/UpdateQuestions";
 
 import { quizSchema, type QuizFormData } from "@/schema/quiz.schema";
 
-import { useGetOneQuiz, useUpdateQuiz } from "@/hooks/useQuiz";
+import {
+  useGetOneQuiz,
+  useGetQuestionsAnswer,
+  useUpdateQuiz,
+} from "@/hooks/useQuiz";
 import {
   Empty,
   EmptyContent,
@@ -45,6 +49,8 @@ const UpdateQuizDialog = ({
   const [step, setStep] = useState(1);
 
   const { data, isLoading, isError } = useGetOneQuiz(quizId);
+  const { data: quizData } = useGetQuestionsAnswer(quizId);
+  const questionsWithAnswer = quizData?.data?.quiz.questions ?? [];
 
   const updateQuiz = useUpdateQuiz();
 
@@ -65,17 +71,17 @@ const UpdateQuizDialog = ({
    * Load the existing DB data into the form.
    */
   useEffect(() => {
-    if (!quiz) return;
+    if (!quiz || !open) return;
 
     form.reset({
       title: quiz.title,
       description: quiz.description,
       category: quiz.category,
-      questions: quiz.questions,
+      questions: questionsWithAnswer,
     });
 
     setStep(1);
-  }, [quiz, form]);
+  }, [open, quiz, form]);
 
   /*
    * Reset when dialog closes.
@@ -123,7 +129,7 @@ const UpdateQuizDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-190">
+      <DialogContent className="sm:max-w-190 font-Outfit">
         {isLoading ? (
           <Empty>
             <EmptyHeader>
@@ -144,7 +150,11 @@ const UpdateQuizDialog = ({
             description="We could not find your quiz"
           />
         ) : (
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit, (errors) => {
+              console.log("❌ SUBMIT VALIDATION ERRORS:", errors);
+            })}
+          >
             <DialogHeader>
               <DialogTitle>Edit Quiz</DialogTitle>
 
@@ -163,17 +173,19 @@ const UpdateQuizDialog = ({
               <Progress value={step === 1 ? 50 : 100} />
             </div>
 
-            {step === 1 ? (
-              <UpdateBasicInfo form={form} />
-            ) : (
-              <UpdateQuestions form={form} />
-            )}
+            <div>
+              {step === 1 ? (
+                <UpdateBasicInfo form={form} />
+              ) : (
+                <UpdateQuestions form={form} />
+              )}
+            </div>
 
             <DialogFooter className="mt-6">
               {step === 2 && (
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="secondary"
                   onClick={handlePrevious}
                 >
                   Previous

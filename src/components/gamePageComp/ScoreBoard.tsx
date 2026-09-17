@@ -32,7 +32,6 @@ const ScoreBoard = () => {
   const { data: quiz } = useGetQuestionsAnswer(quizId);
 
   const questions = quiz?.data.quiz.questions;
-  console.log(questions);
 
   const sortedPlayer = playersInfo?.toSorted((a, b) => {
     if (b.score !== a.score) {
