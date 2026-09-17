@@ -1,3 +1,4 @@
+import EmptyData from "@/components/EmptyData";
 import Heading from "@/components/Heading";
 import { Button } from "@/components/ui/button";
 import {
@@ -168,6 +169,12 @@ const QuickPlayPage = () => {
               ))}
             </TableBody>
           </Table>
+          {games.length === 0 && (
+            <EmptyData
+              title="No Games Available"
+              description="Looks like the arena is quiet. Create a game and let the challenge begin!"
+            />
+          )}
         </div>
       </div>
     </div>
