@@ -150,11 +150,7 @@ const UpdateQuizDialog = ({
             description="We could not find your quiz"
           />
         ) : (
-          <form
-            onSubmit={form.handleSubmit(onSubmit, (errors) => {
-              console.log("❌ SUBMIT VALIDATION ERRORS:", errors);
-            })}
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle>Edit Quiz</DialogTitle>
 

@@ -49,7 +49,6 @@ import { useForm } from "react-hook-form";
 import { modeSchema, type GameMode } from "@/schema/game.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateGame } from "@/hooks/useGame";
-import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import UpdateQuizDialog from "./UpdateQuizDialog";
 
@@ -133,7 +132,6 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
   const createGame = useCreateGame();
   const { data, isLoading } = useGetOneUser(quiz.createdBy);
   const user = data?.data?.user;
-  const navigate = useNavigate();
   const decorRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   const handleCardEnter = () => {
@@ -260,7 +258,6 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onClick={() => {
-                        // navigate("/under-construction");
                         setOpenUpdateDialog(true);
                       }}
                     >

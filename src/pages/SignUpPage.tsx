@@ -50,7 +50,6 @@ const SignUpPage = () => {
     mutationKey: ["signup"],
 
     onSuccess: (res) => {
-      console.log("Clicked");
       toast.add({
         timeout: 3000,
         type: "success",
