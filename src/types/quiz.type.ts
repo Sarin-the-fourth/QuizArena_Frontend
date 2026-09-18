@@ -10,6 +10,7 @@ export interface Quiz {
   title: string;
   description: string;
   category: QuizCategory;
+  quizType: "PUBLIC" | "PRIVATE";
   createdBy?: string;
 }
 
@@ -25,6 +26,7 @@ export interface CreateQuizDTO {
   title: string;
   description: string;
   category: string;
+  quizType: "PUBLIC" | "PRIVATE";
   questions: Question[];
 }
 
@@ -84,6 +86,7 @@ export interface GetQuestionsAnswerResponse {
 export interface UpdateQuizDTO {
   title?: string;
   description?: string;
+  quizType?: "PUBLIC" | "PRIVATE";
   category?: string;
   questions?: Question[];
 }

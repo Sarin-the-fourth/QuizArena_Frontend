@@ -53,6 +53,7 @@ const CreateQuizDialog = ({ open, onOpenChange }: CreateQuizDialogProps) => {
       title: "",
       description: "",
       category: undefined,
+      quizType: "PUBLIC",
       questions: [createEmptyQuestion()],
     },
   });
@@ -67,6 +68,7 @@ const CreateQuizDialog = ({ open, onOpenChange }: CreateQuizDialogProps) => {
         title: "",
         description: "",
         category: undefined,
+        quizType: "PUBLIC",
         questions: [createEmptyQuestion()],
       });
     }

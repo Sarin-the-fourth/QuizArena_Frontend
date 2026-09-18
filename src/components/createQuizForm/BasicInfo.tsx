@@ -128,6 +128,31 @@ const BasicInfo = ({ form }: BasicInfoProps) => {
             </p>
           )}
         </Field>
+
+        <Field>
+          <FieldLabel className="text-base">Quiz Visibility</FieldLabel>
+          <Select
+            value={watch("quizType") ?? ""}
+            onValueChange={(value) =>
+              setValue("quizType", value as QuizFormData["quizType"], {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select visibility" />
+            </SelectTrigger>
+
+            <SelectContent className="font-Outfit">
+              <SelectGroup>
+                <SelectLabel>Quiz Visibility</SelectLabel>
+                <SelectItem value="PUBLIC">Public</SelectItem>
+                <SelectItem value="PRIVATE">Private</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </Field>
       </div>
     </ScrollArea>
   );

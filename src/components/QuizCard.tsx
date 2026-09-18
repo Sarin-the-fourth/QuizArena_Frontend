@@ -46,8 +46,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useForm } from "react-hook-form";
-import { modeSchema, type GameMode } from "@/schema/game.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { type CreateGameForm } from "@/schema/game.schema";
 import { useCreateGame } from "@/hooks/useGame";
 import gsap from "gsap";
 import UpdateQuizDialog from "./UpdateQuizDialog";
@@ -157,10 +156,10 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
     });
   };
 
-  const form = useForm<GameMode>({
-    resolver: zodResolver(modeSchema),
+  const form = useForm<CreateGameForm>({
     defaultValues: {
       mode: "SINGLE",
+      visibility: "PUBLIC",
     },
   });
 
@@ -170,10 +169,11 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
     deleteQuiz(id);
   };
 
-  const handleSubmit = (id: string, gameMode: GameMode["mode"]) => {
+  const handleSubmit = (id: string) => {
     createGame.mutate({
       quizId: id,
-      gameMode: gameMode,
+      gameMode: watch("mode"),
+      gameVisibility: watch("visibility"),
     });
   };
 
@@ -333,28 +333,58 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
               <span>{user?.name}</span>
             </div>
 
-            <div className="flex flex-row items-center gap-2">
-              <span className="font-bold">Mode:</span>
-              <Select
-                value={watch("mode") ?? ""}
-                onValueChange={(value) => {
-                  setValue("mode", value as GameMode["mode"], {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  });
-                }}
-              >
-                <SelectTrigger size="sm">
-                  <SelectValue
-                    placeholder="Select Mode"
-                    className="font-Outfit"
-                  />
-                </SelectTrigger>
-                <SelectContent className="font-Outfit">
-                  <SelectItem value="SINGLE">Single Player</SelectItem>
-                  <SelectItem value="MULTIPLAYER">Multiplayer</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="flex flex-row items-center justify-between">
+              <div className="flex flex-row items-center gap-2">
+                <span className="font-bold">Mode:</span>
+                <Select
+                  value={watch("mode") ?? ""}
+                  onValueChange={(value) => {
+                    setValue("mode", value as CreateGameForm["mode"], {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                >
+                  <SelectTrigger size="sm">
+                    <SelectValue
+                      placeholder="Select Mode"
+                      className="font-Outfit"
+                    />
+                  </SelectTrigger>
+                  <SelectContent className="font-Outfit">
+                    <SelectItem value="SINGLE">Single Player</SelectItem>
+                    <SelectItem value="MULTIPLAYER">Multiplayer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-row items-center gap-2">
+                <span className="font-bold">Visibility:</span>
+                <Select
+                  value={watch("visibility") ?? ""}
+                  onValueChange={(value) => {
+                    setValue(
+                      "visibility",
+                      value as CreateGameForm["visibility"],
+                      {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      }
+                    );
+                  }}
+                >
+                  <SelectTrigger size="sm">
+                    <SelectValue
+                      placeholder="Select Mode"
+                      className="font-Outfit"
+                    />
+                  </SelectTrigger>
+                  <SelectContent className="font-Outfit">
+                    <SelectItem value="PUBLIC">Public</SelectItem>
+                    <SelectItem value="PRIVATE">Private</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
@@ -362,7 +392,7 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
             <Button
               className="font-Outfit"
               onClick={() => {
-                handleSubmit(quiz._id, watch("mode"));
+                handleSubmit(quiz._id);
               }}
               disabled={createGame.isPending}
             >

@@ -4,6 +4,7 @@ export interface Game {
   hostId: string;
   roomCode: string;
   gameMode: string;
+  roomMode: "PUBLIC" | "PRIVATE";
   players: GamePlayer[];
   status: string;
 }
@@ -16,6 +17,7 @@ export interface GamePlayer {
 export interface QuizSummary {
   _id: string;
   title: string;
+  roomMode: "PUBLIC" | "PRIVATE";
   category: string;
 }
 
@@ -48,6 +50,7 @@ export interface GetOneGameResponse {
 export interface CreateGameDTO {
   quizId: string;
   gameMode: string;
+  gameVisibility: "PUBLIC" | "PRIVATE";
 }
 
 export interface CreateGameResponse {

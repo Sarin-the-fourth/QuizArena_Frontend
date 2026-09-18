@@ -64,6 +64,8 @@ export const quizSchema = z.object({
 
   category: categorySchema,
 
+  quizType: z.enum(["PUBLIC", "PRIVATE"]),
+
   questions: z.array(questionSchema).min(1, "Add at least one question"),
 });
 
