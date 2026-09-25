@@ -63,6 +63,7 @@ const UpdateQuizDialog = ({
       title: "",
       description: "",
       category: undefined,
+      quizType: "PUBLIC",
       questions: [],
     },
   });
@@ -78,6 +79,7 @@ const UpdateQuizDialog = ({
       description: quiz.description,
       category: quiz.category,
       questions: questionsWithAnswer,
+      quizType: quiz.quizType,
     });
 
     setStep(1);
@@ -95,6 +97,7 @@ const UpdateQuizDialog = ({
       title: "",
       description: "",
       category: undefined,
+      quizType: "PUBLIC",
       questions: [],
     });
   }, [open, form]);

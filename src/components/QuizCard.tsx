@@ -38,13 +38,7 @@ import {
 } from "./ui/dropdown-menu";
 import { useDeleteQuiz } from "@/hooks/useQuiz";
 import { Spinner } from "./ui/spinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { Switch } from "./ui/switch";
 import { useForm } from "react-hook-form";
 import { type CreateGameForm } from "@/schema/game.schema";
 import { useCreateGame } from "@/hooks/useGame";
@@ -333,57 +327,39 @@ const QuizCard = ({ quiz, loading, isMyQuiz = false }: QuizCardProps) => {
               <span>{user?.name}</span>
             </div>
 
-            <div className="flex flex-row items-center justify-between">
-              <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-row items-center justify-between gap-3">
                 <span className="font-bold">Mode:</span>
-                <Select
-                  value={watch("mode") ?? ""}
-                  onValueChange={(value) => {
-                    setValue("mode", value as CreateGameForm["mode"], {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                  }}
-                >
-                  <SelectTrigger size="sm">
-                    <SelectValue
-                      placeholder="Select Mode"
-                      className="font-Outfit"
-                    />
-                  </SelectTrigger>
-                  <SelectContent className="font-Outfit">
-                    <SelectItem value="SINGLE">Single Player</SelectItem>
-                    <SelectItem value="MULTIPLAYER">Multiplayer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex flex-row items-center gap-2">
-                <span className="font-bold">Visibility:</span>
-                <Select
-                  value={watch("visibility") ?? ""}
-                  onValueChange={(value) => {
-                    setValue(
-                      "visibility",
-                      value as CreateGameForm["visibility"],
-                      {
+                <div className="flex items-center gap-2">
+                  <span>{watch("mode") === "MULTIPLAYER" ? "Multiplayer" : "Single Player"}</span>
+                  <Switch
+                    aria-label="Toggle multiplayer mode"
+                    checked={watch("mode") === "MULTIPLAYER"}
+                    onCheckedChange={(checked) => {
+                      setValue("mode", checked ? "MULTIPLAYER" : "SINGLE", {
                         shouldDirty: true,
                         shouldValidate: true,
-                      }
-                    );
-                  }}
-                >
-                  <SelectTrigger size="sm">
-                    <SelectValue
-                      placeholder="Select Mode"
-                      className="font-Outfit"
-                    />
-                  </SelectTrigger>
-                  <SelectContent className="font-Outfit">
-                    <SelectItem value="PUBLIC">Public</SelectItem>
-                    <SelectItem value="PRIVATE">Private</SelectItem>
-                  </SelectContent>
-                </Select>
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-row items-center justify-between gap-3">
+                <span className="font-bold">Visibility:</span>
+                <div className="flex items-center gap-2">
+                  <span>{watch("visibility") === "PRIVATE" ? "Private" : "Public"}</span>
+                  <Switch
+                    aria-label="Toggle private visibility"
+                    checked={watch("visibility") === "PRIVATE"}
+                    onCheckedChange={(checked) => {
+                      setValue("visibility", checked ? "PRIVATE" : "PUBLIC", {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>

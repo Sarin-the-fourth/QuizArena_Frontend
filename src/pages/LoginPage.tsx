@@ -22,6 +22,7 @@ import { login } from "@/services/auth.service";
 import { toast } from "@/components/ui/toast";
 import axios from "axios";
 import type { loginDTO } from "@/types/auth.type";
+import { authenticateSocket } from "@/lib/socket";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -42,11 +43,22 @@ const LoginPage = () => {
         description: `${res.data.message}`,
       });
       localStorage.setItem("accessToken", res.data.accessToken);
+      authenticateSocket(res.data.accessToken);
       navigate("/");
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        setError(error.response?.data?.message ?? "Something went wrong");
+        const data = error.response?.data;
+
+        if (data?.errors) {
+          setError(
+            data.errors
+              .map((issue: { message: string }) => issue.message)
+              .join("\n")
+          );
+        } else {
+          setError(data?.message ?? "Something went wrong");
+        }
       }
     },
   });
@@ -71,7 +83,7 @@ const LoginPage = () => {
     <div
       data-aos="fade-up"
       data-aos-duration="750"
-      className="flex items-center font-Outfit justify-center h-screen"
+      className=" flex items-center font-Outfit justify-center h-screen"
     >
       <Card className="flex text-start w-full max-w-sm hover:shadow-lg duration-300 transition-shadow">
         <CardHeader>
@@ -118,7 +130,11 @@ const LoginPage = () => {
                   </InputGroupAddon>
                 </InputGroup>
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
+              {error && (
+                <p className="text-sm text-red-500 whitespace-pre-line">
+                  {error}
+                </p>
+              )}
               {/* buttons */}
               <div className="grid gap-4">
                 <Button type="submit" disabled={loginMutation.isPending}>

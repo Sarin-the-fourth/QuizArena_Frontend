@@ -19,6 +19,7 @@ import { useGetMe } from "@/hooks/useUser";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "@/services/auth.service";
 import { showErrorToast, showSuccessToast } from "./Toast";
+import { disconnectSocket } from "@/lib/socket";
 
 const menuItems = [
   {
@@ -72,6 +73,7 @@ const Navbar = () => {
     onSuccess: (res) => {
       showSuccessToast(res?.data?.message);
       localStorage.removeItem("accessToken");
+      disconnectSocket();
       navigate(0);
     },
     onError: (error) => showErrorToast(error),

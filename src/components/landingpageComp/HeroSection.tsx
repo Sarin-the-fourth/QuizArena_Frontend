@@ -73,7 +73,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative flex justify-center items-center h-screen mt-[-60px]! overflow-none">
+    <section className="relative flex justify-center items-center h-screen -mt-15! overflow-none">
       {heroDecorations.map((decoration, index) => {
         const Icon = decoration.Icon;
 
@@ -99,7 +99,7 @@ const HeroSection = () => {
         );
       })}
       <div className="flex flex-col gap-3 text-center items-center justify-center">
-        <h1 className="text-black! font-bold! text-[90px]!">
+        <h1 className="text-black! font-bold! xl:text-[90px]!">
           <span ref={quizheadingRef} className="inline-block">
             Quiz
           </span>{" "}

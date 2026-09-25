@@ -49,7 +49,7 @@ const UpdateBasicInfo = ({ form }: UpdateBasicInfoProps) => {
     <ScrollArea
       data-aos="fade-up"
       data-aos-duration="750"
-      className="2xl:h-full border border-gray-300 rounded-xl"
+      className="2xl:h-full h-100 border border-gray-300 rounded-xl"
     >
       <div className="flex flex-col gap-5 p-5 font-Outfit">
         <Field>
@@ -122,6 +122,43 @@ const UpdateBasicInfo = ({ form }: UpdateBasicInfoProps) => {
                     {category}
                   </SelectItem>
                 ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <FieldDescription>
+            Choose a category that best fits your quiz
+          </FieldDescription>
+
+          {errors.category && (
+            <p className="text-sm text-destructive">
+              {errors.category.message}
+            </p>
+          )}
+        </Field>
+
+        <Field>
+          <FieldLabel className="text-base">Visibility</FieldLabel>
+
+          <Select
+            value={watch("quizType") ?? ""}
+            onValueChange={(value) =>
+              setValue("quizType", value as QuizFormData["quizType"], {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Quiz Visibility</SelectLabel>
+
+                <SelectItem value="PUBLIC">Public</SelectItem>
+                <SelectItem value="PRIVATE">Private</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

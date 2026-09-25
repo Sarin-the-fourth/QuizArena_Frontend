@@ -19,6 +19,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { signUp } from "@/services/auth.service";
+import { authenticateSocket } from "@/lib/socket";
 import { toast } from "@/components/ui/toast";
 import axios from "axios";
 import type { signupDTO } from "@/types/auth.type";
@@ -57,6 +58,7 @@ const SignUpPage = () => {
       });
 
       localStorage.setItem("accessToken", res.data.accessToken);
+      authenticateSocket(res.data.accessToken);
 
       navigate("/");
     },
