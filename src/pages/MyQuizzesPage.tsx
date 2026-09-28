@@ -23,7 +23,7 @@ const MyQuizzesPage = () => {
       data-aos-duration="750"
       className="flex flex-col gap-10"
     >
-      <div className="flex flex-row justify-between items-center px-10">
+      <div className="flex flex-col gap-5 md:gap-0 md:flex-row justify-between items-center px-10">
         <Heading
           heading="Your Quizzes"
           description="Create, manage, and keep track of the quizzes you've built."

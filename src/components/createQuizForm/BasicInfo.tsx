@@ -45,6 +45,7 @@ const BasicInfo = ({ form }: BasicInfoProps) => {
     <ScrollArea
       data-aos="fade-up"
       data-aos-duration="750"
+      onWheel={(e) => e.stopPropagation()}
       className="2xl:h-full h-100 border border-gray-300 rounded-xl"
     >
       <div className="flex flex-col gap-5 p-5 font-Outfit">

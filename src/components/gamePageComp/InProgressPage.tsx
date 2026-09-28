@@ -135,12 +135,12 @@ const InProgressPage = () => {
 
           <div className="flex flex-col gap-3 text-start">
             <div className="flex justify-between items-center">
-              <div className="text-lg font-semibold w-[80%] whitespace-pre-line">
+              <div className="text-lg font-semibold md:w-[80%] whitespace-pre-line">
                 Question {currentQuestion + 1}: {question?.question}?
               </div>
               <span
                 ref={timerRef}
-                className={`text-muted-foreground text-sm mr-5 ${
+                className={`hidden md:flex text-muted-foreground text-sm mr-5 ${
                   timeLeft <= 5 && `text-red-500! font-semibold! overflow-none`
                 }`}
               >
@@ -162,6 +162,14 @@ const InProgressPage = () => {
                   </div>
                 ))}
               </RadioGroup>
+              <span
+                ref={timerRef}
+                className={`md:hidden flex justify-end text-muted-foreground text-sm mr-5 ${
+                  timeLeft <= 5 && `text-red-500! font-semibold! overflow-none`
+                }`}
+              >
+                Time: {timeLeft} sec
+              </span>
               <FieldDescription className="font-semibold mt-2!">
                 Choose wisely! Once you move on, there's no going back.
               </FieldDescription>

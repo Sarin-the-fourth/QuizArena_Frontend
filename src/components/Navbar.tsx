@@ -14,12 +14,20 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { UserIcon } from "lucide-react";
+import { Menu, UserIcon, X } from "lucide-react";
 import { useGetMe } from "@/hooks/useUser";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "@/services/auth.service";
 import { showErrorToast, showSuccessToast } from "./Toast";
 import { disconnectSocket } from "@/lib/socket";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTrigger,
+} from "./ui/drawer";
 
 const menuItems = [
   {
@@ -39,6 +47,7 @@ const menuItems = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const { data } = useGetMe();
   const user = data?.data?.user;
@@ -80,12 +89,13 @@ const Navbar = () => {
   });
 
   const handleLogout = () => {
+    setMenuOpen(false);
     logoutMutation.mutate();
   };
 
   return (
     <nav
-      className={`fixed left-10 right-10 top-5 z-20 flex h-17 shrink-0 items-center rounded-full border border-black/5 bg-white/10 px-20 shadow-md hover:shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 ${
+      className={`fixed left-3 right-3 top-3 z-20 flex h-16 shrink-0 items-center rounded-2xl border border-black/5 bg-white/85 px-4 shadow-md shadow-black/5 backdrop-blur-xl transition-all duration-300 sm:left-6 sm:right-6 sm:top-4 sm:px-6 sm:rounded-full lg:left-10 lg:right-10 lg:top-5 lg:h-17 lg:px-20 ${
         scrolled ? "-translate-y-[calc(100%+20px)]" : "translate-y-0"
       }`}
     >
@@ -94,12 +104,15 @@ const Navbar = () => {
         <img
           src="/QuizArenaTransparent.svg"
           alt="Quiz Arena"
-          className="h-15 w-15 cursor-pointer object-contain transition-transform duration-300 hover:-rotate-10 hover:scale-115"
-          onClick={() => navigate("/")}
+          className="h-12 w-12 cursor-pointer object-contain transition-transform duration-300 hover:-rotate-10 hover:scale-115 sm:h-14 sm:w-14"
+          onClick={() => {
+            setMenuOpen(false);
+            navigate("/");
+          }}
         />
 
-        {/* Navigation */}
-        <NavigationMenu className="absolute left-[37%]">
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden lg:flex absolute left-[37%]">
           <NavigationMenuList className="gap-10">
             {menuItems.map((item) => (
               <NavigationMenuItem
@@ -126,7 +139,128 @@ const Navbar = () => {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <NavigationMenu>
+        <Drawer
+          swipeDirection="right"
+          open={menuOpen}
+          onOpenChange={setMenuOpen}
+        >
+          <DrawerTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="flex lg:hidden"
+                aria-label="Open navigation menu"
+              >
+                <Menu className="size-5" />
+              </Button>
+            }
+          />
+          <DrawerContent className="h-full w-[min(22rem,88vw)] max-h-dvh bg-background px-5 pb-6 pt-4">
+            <DrawerHeader className="flex flex-row items-center justify-between border-b border-border px-0 pb-5">
+              <div>
+                <span className="block text-2xl font-bold font-Outfit">
+                  Quiz Arena
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  Choose where to go
+                </span>
+              </div>
+              <DrawerClose
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Close navigation menu"
+                  >
+                    <X />
+                  </Button>
+                }
+              />
+            </DrawerHeader>
+            <nav className="flex flex-1 flex-col gap-2 pt-6">
+              <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Explore
+              </p>
+              <div className="flex flex-col gap-1">
+                {menuItems.map((item) => (
+                  <div key={item.path}>
+                    <Link
+                      to={item.path}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex min-h-14 items-center rounded-xl px-3 font-ComicRelief text-xl font-bold transition-colors hover:bg-muted active:bg-muted"
+                    >
+                      {item.label}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </nav>
+            <DrawerFooter className="border-t border-border px-0 pt-5">
+              {user ? (
+                <>
+                  <div className="flex items-center gap-3 px-2 pb-3">
+                    <Avatar size="default">
+                      <AvatarFallback>
+                        <UserIcon />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <p className="truncate font-ComicRelief font-semibold">
+                        {user.name}
+                      </p>
+                      <p className="text-xs font-ComicRelief text-muted-foreground">
+                        Signed in
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    className="w-full font-Outfit justify-start"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/under-construction");
+                    }}
+                  >
+                    Profile
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="w-full font-Outfit justify-start"
+                    disabled={logoutMutation.isPending}
+                    onClick={handleLogout}
+                  >
+                    {logoutMutation.isPending ? "Logging out…" : "Log out"}
+                  </Button>
+                </>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    className="font-Outfit"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/login");
+                    }}
+                  >
+                    Log In
+                  </Button>
+                  <Button
+                    className="font-Outfit"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/signup");
+                    }}
+                  >
+                    Sign Up
+                  </Button>
+                </div>
+              )}
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+
+        <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
             <NavigationMenuItem className="flex flex-row items-center">
               {user ? (

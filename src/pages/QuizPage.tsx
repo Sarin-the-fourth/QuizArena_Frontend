@@ -109,7 +109,7 @@ const QuizPage = () => {
       className="flex flex-col gap-10"
     >
       {/* Header */}
-      <div className="flex justify-between items-center px-5">
+      <div className="flex md:flex-row flex-col gap-5 md:gap-0 justify-between items-center px-5">
         <Heading
           heading="Explore Quizzes"
           description="Discover something new, test your knowledge, and keep learning."
@@ -146,7 +146,7 @@ const QuizPage = () => {
           <div
             data-aos="fade-up"
             data-aos-duration="750"
-            className="grid grid-cols-3 gap-5 2xl:gap-10 mx-auto justify-items-center"
+            className="flex flex-col md:grid md:grid-cols-3 gap-5 2xl:gap-10 mx-auto justify-items-center"
           >
             {paginatedList.map((quiz) => (
               <QuizCard

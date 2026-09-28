@@ -95,17 +95,17 @@ const GamePage = () => {
       fade-aos-duration="750"
       className="flex flex-col gap-10"
     >
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col gap-5 md:gap-0 md:flex-row justify-between items-center">
         <Heading
           heading="Ready, Set, Quiz!"
           description="Challenge your knowledge, climb the leaderboard, and prove you're the ultimate quiz master."
         />
-        <div className="flex flex-col items-end gap-2 font-Outfit">
+        <div className="flex flex-row justify-between md:flex-col items-center md:items-end gap-2 font-Outfit">
           <span className="text-gray-500 text-sm">
             Room Code: <strong>{roomCode}</strong>
           </span>
 
-          <Separator />
+          <Separator className="md:flex hidden" />
           {isWaiting &&
             (isHost ? (
               <Button
@@ -144,7 +144,7 @@ const GamePage = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-[30%_68%] gap-6 font-Outfit">
+        <div className="flex flex-col md:grid md:grid-cols-[30%_68%] gap-6 font-Outfit">
           <div className="flex flex-col gap-2">
             <div className="w-full rounded-xl h-fit flex flex-col gap-2 text-start shadow-lg p-5">
               <div className="flex flex-row items-center justify-between">

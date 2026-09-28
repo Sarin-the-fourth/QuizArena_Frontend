@@ -71,7 +71,7 @@ const ExploreSection = () => {
   };
 
   return (
-    <section className="flex items-center justify-center font-Outfit">
+    <section className="hidden lg:flex items-center justify-center font-Outfit">
       <div className="relative h-50 w-full max-w-5xl">
         {cards.map((card) => {
           const position = (card.id - activeCard + cards.length) % cards.length;

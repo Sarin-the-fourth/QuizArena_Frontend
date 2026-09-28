@@ -41,7 +41,7 @@ const QuickPlayPage = () => {
       data-aos-duration="750"
       className="flex flex-col gap-10"
     >
-      <div className="flex flex-row justify-between items-center px-5">
+      <div className="flex flex-col gap-5 md:gap-0 md:flex-row justify-between items-center px-5">
         <Heading
           heading="Jump In & Play"
           description="Jump into a game, join a hosted match, or enter a room code and

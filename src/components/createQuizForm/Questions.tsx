@@ -230,11 +230,12 @@ const Questions = ({ form }: QuestionsProps) => {
     <ScrollArea
       data-aos="fade-up"
       data-aos-duration="750"
-      className="2xl:h-120 h-100 font-Outfit border border-gray-300 rounded-xl overflow-y-auto"
+      onWheel={(e) => e.stopPropagation()}
+      className="h-[min(55vh,26rem)] min-h-64 w-full min-w-0 rounded-xl border border-gray-300 font-Outfit sm:h-100 2xl:h-120"
     >
-      <div className="flex flex-col gap-5 font-Outfit p-5">
+      <div className="flex min-w-0 flex-col gap-5 p-3 font-Outfit sm:p-5">
         <div className="flex flex-col">
-          <div className="flex justify-between items-center w-full">
+          <div className="flex w-full flex-wrap items-center justify-between gap-2">
             <span className="text-gray-400 text-sm">
               Question {questionNumber} of {fields.length}
             </span>
@@ -296,8 +297,8 @@ const Questions = ({ form }: QuestionsProps) => {
 
         <div>
           <Field>
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col">
+            <div className="flex flex-wrap items-start justify-between gap-2 sm:items-center">
+              <div className="flex min-w-0 flex-col">
                 <FieldLabel className="text-base">Options</FieldLabel>
 
                 <FieldDescription>
@@ -308,7 +309,7 @@ const Questions = ({ form }: QuestionsProps) => {
               <Button
                 type="button"
                 variant="ghost"
-                className="text-black/70 text-xs"
+                className="shrink-0 text-xs text-black/70"
                 disabled={question.options.length >= 4}
                 onClick={handleAddOption}
               >
@@ -329,9 +330,12 @@ const Questions = ({ form }: QuestionsProps) => {
               }
             >
               {question.options.map((option, index) => (
-                <div key={option.id} className="flex items-center gap-3">
+                <div
+                  key={option.id}
+                  className="flex min-w-0 items-center gap-2 sm:gap-3"
+                >
                   <RadioGroupItem value={option.id} />
-                  <InputGroup className="w-70">
+                  <InputGroup className="w-full min-w-0 flex-1">
                     <Controller
                       control={control}
                       name={`questions.${currentQuestion}.options.${index}.option`}
@@ -378,7 +382,7 @@ const Questions = ({ form }: QuestionsProps) => {
         {/* TIME LIMIT */}
 
         <div>
-          <Field orientation="horizontal">
+          <Field className="flex-col items-start gap-2 sm:flex-row sm:items-center">
             <FieldLabel>Time per Question:</FieldLabel>
 
             <div className="flex items-center gap-2">
@@ -391,7 +395,7 @@ const Questions = ({ form }: QuestionsProps) => {
                     min={5}
                     max={15}
                     step={1}
-                    className="w-15!"
+                    className="w-16!"
                     value={field.value}
                     onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />

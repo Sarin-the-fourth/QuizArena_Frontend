@@ -80,7 +80,7 @@ const HeroSection = () => {
         return (
           <div
             key={index}
-            className="absolute hero-decoration"
+            className="hidden md:flex absolute hero-decoration"
             style={{
               top: decoration.top,
               right: decoration.right,
@@ -99,7 +99,7 @@ const HeroSection = () => {
         );
       })}
       <div className="flex flex-col gap-3 text-center items-center justify-center">
-        <h1 className="text-black! font-bold! xl:text-[90px]!">
+        <h1 className="text-black! font-bold! leading-20 lg:leading-0 text-[90px]!">
           <span ref={quizheadingRef} className="inline-block">
             Quiz
           </span>{" "}
@@ -110,7 +110,7 @@ const HeroSection = () => {
         <p
           data-aos="fade-up"
           data-aos-duration="750"
-          className="text-muted-foreground w-[70%] font-Outfit"
+          className="text-muted-foreground w-[90%] lg:w-[70%] font-Outfit"
         >
           Think you know it all? Put your knowledge to the test, challenge your
           friends, and race against the clock to become the Quiz Arena champion.
@@ -118,7 +118,7 @@ const HeroSection = () => {
         <div
           data-aos="fade-up"
           data-aos-duration="750"
-          className="flex flex-row font-Outfit justify-between w-[20%] mt-2"
+          className="flex gap-5 lg:gap-0  flex-row font-Outfit justify-between lg:w-[20%] mt-2"
         >
           <Button
             variant="outline"

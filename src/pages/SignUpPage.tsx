@@ -110,7 +110,7 @@ const SignUpPage = () => {
       data-aos-duration="750"
       className="flex items-center justify-center h-screen font-Outfit"
     >
-      <Card className="flex text-start w-full max-w-sm hover:shadow-lg duration-300 transition-shadow">
+      <Card className="flex text-start w-full max-w-xs md:max-w-sm hover:shadow-lg duration-300 transition-shadow">
         <CardHeader>
           <CardTitle className="font-Outfit text-xl">
             Create an Account
